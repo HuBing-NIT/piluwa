@@ -1,37 +1,38 @@
 <template>
     <div id="footer">
-        <div class="menu">
+        <!-- <router-link to="/home" tag="div" class="menu"> -->
+        <router-link to="/home" tag="div" class="menu">
             <svg :class="icon_active?'icon active':'icon'" @click="changes" aria-hidden="true">
                 <use xlink:href="#icon-shouyexuanzhong"></use>
             </svg>
             <span class="txt">
                 首页
             </span>
-        </div>
-        <div class="menu">
+        </router-link>
+        <router-link to="/classify" tag="div" class="menu">
             <svg :class="icon_active?'icon active':'icon'" @click="changes" aria-hidden="true">
                 <use xlink:href="#icon-shouyexuanzhong"></use>
             </svg>
             <span class="txt">
                 分类
             </span>
-        </div>
-        <div class="menu">
+        </router-link>
+        <router-link to="/cart" tag="div" class="menu">
             <svg :class="icon_active?'icon active':'icon'" @click="changes" aria-hidden="true">
                 <use xlink:href="#icon-shouyexuanzhong"></use>
             </svg>
             <span class="txt">
                 购物车
             </span>
-        </div>
-        <div class="menu">
+        </router-link>
+        <router-link to="/my" tag="div" class="menu">
             <svg :class="icon_active?'icon active':'icon'" @click="changes" aria-hidden="true">
                 <use xlink:href="#icon-shouyexuanzhong"></use>
             </svg>
             <span class="txt">
                 我的
             </span>
-        </div>
+        </router-link>
         
     </div>
 </template>

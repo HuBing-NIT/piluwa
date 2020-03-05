@@ -13,5 +13,6 @@ module.exports = {
             .set('style', resolve('./src/style'))
             .set('components', resolve('./src/components'))
             .set('icon', resolve('./public/icon'))
+            .set('imgs', resolve('./public/imgs'))
     }
 }

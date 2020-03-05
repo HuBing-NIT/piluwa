@@ -1,0 +1,16 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "6638079",
+      "name": "首页选中",
+      "font_class": "shouyexuanzhong",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    }
+  ]
+}

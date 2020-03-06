@@ -11,13 +11,17 @@ import 'style/common.css'
 import 'style/flexble.js' //100px = 1rem
 
 // 引入icon图标库
-import 'icon/iconfont.js'
+import './assets/icon/iconfont.css'
+
+// 引入动画库
+import 'animate.css/animate.css'
 
 
 
-// 引入mint-ui组件库
-import Mint from 'mint-ui';
-Vue.use(Mint);
+// 导入vant组件库
+import Vant from 'vant';
+import 'vant/lib/index.css';
+Vue.use(Vant);
 
 Vue.config.productionTip = false
 

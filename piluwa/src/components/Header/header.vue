@@ -1,29 +1,27 @@
 <template>
     <div  id='header'>
-        首页
+        <!-- <van-icon name="arrow-left" size='0.2rem' /> -->
+        <p>首页</p>
     </div>
 </template>
 
 
 <script>
+import {mapState,mapMutations} from 'vuex'
 export default {
-    
+    computed:{
+        ...mapState(['nowPage'])
+    },
 }
 </script>
 
 
 <style lang="less" scoped>
+@import '~style/mixin.less';
     #header{
-        width: 100%;
-        height: 0.48rem;
-        position: fixed;
-        top: 0;
-        font-size: 0.16rem;
-        text-align: center;
-        line-height: 0.48rem;
-        color: #000;
-        font-weight: 700;
-        font-family: 'Microsoft YaHei';
-        background: rgb(247, 242, 242)
+        .head();
+        // p{
+        //     margin-left: 0.1rem;
+        // }
     }
 </style>

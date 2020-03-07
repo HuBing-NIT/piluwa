@@ -22,6 +22,9 @@ import 'animate.css/animate.css'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
+// import { Toast } from 'vant';
+// Vue.use(Toast);
+
 
 Vue.config.productionTip = false
 

@@ -2,7 +2,11 @@
     <div id="classify">
         <!-- 顶部搜索框 -->
         <div class="search">
-            这里是搜索框
+            <van-search
+                v-model="value"
+                shape="round"
+                placeholder="请输入搜索关键词"
+            />
         </div>
         <!-- 分类-列表   -->
         <div class="c-list" >
@@ -20,12 +24,11 @@
             </nav>
             <!-- 右侧类别对应商品 -->
             <nav class="list-r">
-                <li>内容后续补充</li>   
-                <li>内容后续补充</li>   
-                <li>内容后续补充</li>   
-                <li>内容后续补充</li>   
-                <li>内容后续补充</li>   
-                <li>内容后续补充</li>   
+                <li v-for="(item,index) in TypeList" :key="index">
+                    <img :src="item.imgUrl" alt="">
+                    <span>{{item.title}}</span>
+                </li>   
+               
             </nav>
         </div>
     </div>
@@ -33,19 +36,35 @@
 
 
 <script>
+import {getClassify} from 'api/api.js'
 export default {
     data(){
         return{
             // classifyDetailList:[],
-            classifyList:['推荐分类','皮噜娃尿包','全球奶粉','尿不湿','营养辅食','喂养用品','宝宝洗护','清洁用品','孕产母乳','婴幼儿服饰','宝宝出行'], //左侧类别
+            classifyList:['推荐分类','全球奶粉','皮噜娃尿包','尿不湿','营养辅食','喂养用品','宝宝洗护','清洁用品','孕产母乳','婴幼儿服饰','宝宝出行'], //左侧类别
             classifySelIndex:0,//当前选中的类别的索引
+            TypeList:[],
         }
     },
     methods: {
         // 点击切换类别
         changesel(index){ 
+            //点击切换类别和商品
             this.classifySelIndex=index;
+            this.getType(index+1); 
+        },
+        // 请求类别数据
+        getType(index){
+             getClassify(index).then((res)=>{
+                 console.log(res)
+                 this.TypeList=res.result;
+             })
         }
+    },
+    mounted(){
+        // 挂在组件时请求数据
+        this.getType(1)
+    
     }
 }
 
@@ -96,9 +115,21 @@ export default {
                 li{
                     width: 33.3%;
                     height: 1.15rem;
-                    background: gray;
-                    // background: black;
-                    // color: white
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-around;
+                    img{
+                        width: 0.6rem
+                    }
+                    span{
+                        display: inline-block;
+                        text-align: center;
+                        width: 80%;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
                 }
             }
 

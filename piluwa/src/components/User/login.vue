@@ -9,36 +9,61 @@
             <van-icon name="arrow-left" size='0.2rem' @click="back" />
             <p>登录</p>
         </div>
-         <!-- 内容 -->
+         <!-- 登录表单  -->
         <div id="content">
             <img src="../../../public/imgs/loginlogo.jpg" alt="">
-            <input placeholder="请输入手机号码" name="" id="">
-            <input placeholder="请输入密码" name="" id="" ref="pass">
+            <input placeholder="请输入手机号码" name="" id="" v-model="logPhone">
+            <input placeholder="请输入密码" name="" id=""  v-model="logPass">
+            <span @click="getYzm">获取验证码</span>
             <div style="width:100%">
                  <van-button @click="login" color="linear-gradient(to right, #eb6202, #fe7e25)" round  size='large'>登录</van-button>
             </div>
-        </div>
+
+             <!-- 注册 密码找回 -->
+            <div id="operate">
+                <span>忘记密码</span>
+                <router-link to="/tologin/login/register">新用户注册</router-link>
+                <!-- <span @click="register">新用户注册</span> -->
+            </div>
+        </div>      
+
+        <router-view></router-view> 
     </div>
      </transition>
 </template>
 
 
 <script>
-import {Login} from 'api/api.js'
+import {Login,getCode} from 'api/api.js'
 export default {
+    data(){
+        return{
+            logPhone:'',
+            logPass:''
+        }
+    },
     methods: {
         back(){
             this.$router.go(-1);
         },
         login(){
             let obj = {
-                phone:'18352936365',
-                code:this.$refs.pass.value
+                phone:this.logPhone,
+                code:this.logPass
             }
-            console.log(this.$refs.pass.value)
             Login(obj).then((res)=>{
+                console.log('登录成功')
                 console.log(res)
             })
+        },
+        getYzm(){
+               let obj = {
+                    phone:this.logPhone,
+                    templateId:"537707"
+                }
+                getCode(obj).then((res)=>{
+                    console.log(res);
+                })
         }
     }
 }
@@ -77,6 +102,13 @@ export default {
                 height: 0.36rem;
                 border-bottom: 1px solid #e3e3e3;
             }
+            #operate{
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+                
+            }
         }
+        
     }
 </style>

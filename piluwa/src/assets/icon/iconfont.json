@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "5702511",
+      "name": "福利",
+      "font_class": "fuli",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "7150766",
+      "name": "甄选",
+      "font_class": "zhenxuan",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "9063167",
+      "name": "会员中心",
+      "font_class": "huiyuanzhongxin",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "12796732",
+      "name": "热销榜",
+      "font_class": "rexiaobang",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "10335522",
       "name": "退出登录",
       "font_class": "tuichudenglu",

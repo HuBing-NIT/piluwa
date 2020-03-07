@@ -1,7 +1,7 @@
 
 <template>
     <transition
-        enter-active-class="animated slideInRight"
+
         leave-active-class="animated slideOutRight"
     >
     <div id="tologin">
@@ -19,7 +19,9 @@
             </div>
            
         </div>
+        <keep-alive>
         <router-view></router-view>
+        </keep-alive>
     </div>
      </transition>
 </template>
@@ -46,7 +48,7 @@ export default {
         left:0px;
         right: 0px;
         background: white;
-        z-index: 2;
+        z-index: 3;
         #header{
             .head();
         }

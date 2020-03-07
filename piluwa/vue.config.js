@@ -14,5 +14,17 @@ module.exports = {
             .set('components', resolve('./src/components'))
             .set('icon', resolve('./public/icon'))
             .set('imgs', resolve('./public/imgs'))
-    }
+    },
+    // devServer: {
+    //     proxy: { //配置代理服务器
+    //         // 接口小暗号
+    //         '/hehe': {
+    //             target: 'http://www.pudge.wang', //要转发的目标网址目标网址 
+    //             changeOrigin: true,
+    //             pathRewrite: {
+    //                 "^/hehe": '' //将路径中多余的暗号 删除
+    //             }
+    //         }
+    //     }
+    // }
 }

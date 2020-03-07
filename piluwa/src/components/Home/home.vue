@@ -6,16 +6,21 @@
         <!-- menu菜单1 -->
         <div id="menu-1">
             <div class="menu-1-btn">
-                <span>ico</span><span>每日福利</span>
+                 <van-icon class="iconfont" class-prefix='icon' name='fuli' size="0.28rem"  color="red"/>
+                <span>每日福利</span>
             </div>
             <div class="menu-1-btn">
-                 <span>ico</span><span>每日福利</span>
+                  <van-icon class="iconfont" class-prefix='icon' name='rexiaobang'  size="0.28rem" color="red"/>
+                  <span>热销榜</span>
             </div>
             <div class="menu-1-btn">
-                 <span>ico</span><span>每日福利</span>
+                
+                <van-icon class="iconfont" class-prefix='icon' name='zhenxuan' size="0.28rem"  color="red"/>
+                <span>皮噜甄选</span>
             </div>
             <div class="menu-1-btn">
-                 <span>ico</span><span>每日福利</span>
+                  <van-icon class="iconfont" class-prefix='icon' name='huiyuanzhongxin' size="0.28rem"  color="skyblue"/>
+                 <span>会员中心</span>
             </div>
         </div>
 

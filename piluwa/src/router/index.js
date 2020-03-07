@@ -6,8 +6,8 @@ import home from 'components/Home/home.vue'
 import cart from 'components/Cart/cart.vue'
 import classify from 'components/Classify/classify.vue'
 import tologin from 'components/User/tologin.vue'
+import register from 'components/User/register.vue'
 import login from 'components/User/login.vue'
-
 
 // Vue.component({ tologin })
 const routes = [{
@@ -20,6 +20,10 @@ const routes = [{
         children: [{
             path: ':login',
             component: login,
+            children: [{
+                path: ':register',
+                component: register,
+            }]
         }]
     },
     { path: '/home', component: home },

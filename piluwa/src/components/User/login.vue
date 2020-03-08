@@ -1,6 +1,5 @@
 <template>
     <transition
-        enter-active-class="animated slideInRight"
         leave-active-class="animated slideOutRight"
     >   
     <div id="login">
@@ -22,12 +21,12 @@
              <!-- 注册 密码找回 -->
             <div id="operate">
                 <span>忘记密码</span>
-                <router-link to="/tologin/login/register">新用户注册</router-link>
-                <!-- <span @click="register">新用户注册</span> -->
+                <!-- <router-link to="/tologin/login/register">新用户注册</router-link> -->
+                <span @click="register">新用户注册</span>
             </div>
         </div>      
 
-        <router-view></router-view> 
+        <!-- <router-view></router-view>  -->
     </div>
      </transition>
 </template>
@@ -43,6 +42,9 @@ export default {
         }
     },
     methods: {
+        register(){
+            this.$router.push('/tologin/register')
+        },
         back(){
             this.$router.go(-1);
         },

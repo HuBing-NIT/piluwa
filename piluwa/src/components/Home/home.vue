@@ -2,7 +2,6 @@
     <div id="home">
         <!-- 轮播图 -->
         <banner :urllist='urllist'></banner>
-
         <!-- menu菜单1 -->
         <div id="menu-1">
             <div class="menu-1-btn">
@@ -26,22 +25,25 @@
 
         <!-- menu菜单2 -->
         <div id="menu-2">
-            <div class="menu-2-btn" style="background:#fff6e5">
-                <span class="txt">全球奶粉</span>
-                <img src="../../../public/imgs/qqnf.jpg" alt="">
-            </div>
-             <div class="menu-2-btn" style="background:#fff3f5">
-                 <span class="txt">尿不湿</span>
+            
+                <router-link to="/home/全球奶粉" class="menu-2-btn" style="background:#fff6e5">
+                    <span class="txt">全球奶粉</span>
+                    <img src="../../../public/imgs/qqnf.jpg" alt="">
+                </router-link>
+           
+            
+             <router-link to="/home/尿不湿" class="menu-2-btn" style="background:#fff3f5">
+                  <span class="txt">尿不湿</span>
                   <img src="../../../public/imgs/nbs.jpg" alt="">
-            </div>
-             <div class="menu-2-btn" style="background:#fcfef0">
+            </router-link>
+             <router-link to="/home/营养辅食" class="menu-2-btn" style="background:#fcfef0">
                  <span class="txt">营养辅食</span>
                   <img src="../../../public/imgs/yyfs.jpg" alt="">
-            </div>
-             <div class="menu-2-btn" style="background:#f6f7fc">
+            </router-link>
+             <router-link to="/home/宝宝洗护" class="menu-2-btn" style="background:#f6f7fc">
                  <span class="txt">宝宝洗护</span>
                   <img src="../../../public/imgs/bbxh.jpg" alt="">
-            </div>
+            </router-link>
         </div>
 
         <!-- 推荐商品 -->
@@ -66,8 +68,9 @@
             </nav>
         </div>
         
-
-
+    <!-- <keep-alive> -->
+        <router-view></router-view>
+    <!-- </keep-alive> -->
     </div>
 </template>
 
@@ -95,7 +98,6 @@ export default {
             // console.log(res.result.list)
             this.recList =res.result.list
         })
-
     }
 }
 </script>

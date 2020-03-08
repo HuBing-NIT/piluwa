@@ -3,7 +3,7 @@
         <!-- 登陆成功失败状态 -->
        <div class="LoginState">
            <!-- 登录成功显示 -->
-            <div class="login" v-if="LoginState">
+            <div class="login" v-if="LoginState" @click='Tomymsg'>
                登陆成功
             </div>
             <!-- 未登录显示 -->
@@ -48,8 +48,8 @@
             </van-grid>
         </div>
 
-         <!--嵌套路由 登陆组件 -->
-       <router-view></router-view>
+        <!--嵌套路由 登陆组件 -->
+        <router-view></router-view>
     </div>
     
 </template>
@@ -59,7 +59,7 @@
 export default {
     data(){
         return {
-            LoginState:false,
+            LoginState:true,
             orderarr:[{icon: 'daifukuan',title: '待付款'},{icon: 'daifahuo',title: '待发货'},{icon: 'daishouhuo',title: '待收货'},{icon: 'qianshou-',title: '已收货'}],
             arr:[{icon: 'biaodan',title: '我的表单'},{icon: 'huiyuanqia',title: '我的会员卡'},{icon: 'wodejifen',title: '我的积分'},{icon: 'wodeyouhuiquan',title: '我的优惠券'},
             {icon: 'yue',title: '我的余额'},{icon: 'kanjiashangcheng',title: '我的砍价'},{icon: 'icon',title: '推广员中心'},{icon: 'shouhuoren',title: '收货人信息'}]
@@ -75,7 +75,9 @@ export default {
             if(index==this.$refs.tab.length-1){
                 this.LoginState=false;
             }
-            
+        },
+        Tomymsg(){ //前往个人信息
+            this.$router.push('/my/mymsg')
         }
     },
     watch:{

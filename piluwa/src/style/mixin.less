@@ -1,8 +1,22 @@
+.page(){
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left:0px;
+    right: 0px;
+    background: white;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+}
+
 .head(){
         width: 100%;
         height: 0.48rem;
-        position: fixed;
-        top: 0;
+        // position: fixed;
+        // top: 0;
         font-size: 0.16rem;
         line-height: 0.48rem;
         color: #000;
@@ -10,11 +24,14 @@
         font-family: 'Microsoft YaHei';
         // background: rgb(247, 242, 242);
         background:#fff;
-        z-index: 1;
+        // z-index: 1;
         display: flex;
         align-items: center;
+        border-bottom: 1px solid #e2e1e6;
+        
         p{
-            margin-left: 0.1rem;
+            margin: 0 auto;
+            transform: translateX(-0.1rem);
         }
 }
 
@@ -24,3 +41,9 @@
             top: 0.48rem;
             bottom: 0.48rem;
 }
+// .content_b(){
+//     width: 100%;
+//     position: absolute;
+//     top: 0.48rem;
+//     bottom: 0;
+// }

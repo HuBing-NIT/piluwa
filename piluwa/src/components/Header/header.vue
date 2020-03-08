@@ -20,6 +20,7 @@ export default {
 @import '~style/mixin.less';
     #header{
         .head();
+        border-bottom: 1px solid #e2e1e6;
         // p{
         //     margin-left: 0.1rem;
         // }

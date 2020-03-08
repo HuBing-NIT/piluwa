@@ -44,6 +44,7 @@ export default {
             classifyList:['推荐分类','全球奶粉','皮噜娃尿包','尿不湿','营养辅食','喂养用品','宝宝洗护','清洁用品','孕产母乳','婴幼儿服饰','宝宝出行'], //左侧类别
             classifySelIndex:0,//当前选中的类别的索引
             TypeList:[],
+            value:'',
         }
     },
     methods: {

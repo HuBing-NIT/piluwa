@@ -1,6 +1,6 @@
 <template>
     <transition
-        leave-active-class="animated slideOutRight"
+
         enter-active-class="animated slideInRight"
     >   
     <div id="mymsg">
@@ -12,22 +12,24 @@
 
         <!-- 收获地址信息 -->
         <nav id="addressList">
-            <li>
+            <li v-for="(item,index) in addressList" :key="index">
                 <p>
-                    <span>胡冰</span>
-                    <span>18352936365</span>
+                    <span>{{item.getName}}</span>
+                    <span>{{item.getPhone}}</span>
                 </p>
                 <p>
-                    <span>上海</span>
-                    <span>Xx区</span>
-                    <span>XXXxxx</span>
+                   <span>{{item.address}}</span>
                 </p>
+                <div class="edit" :addressId='item.addressId' @click="editaddress(item.addressId)" >
+                    <van-icon   size="0.15rem" color="#f58232" name="records" />
+                </div>
             </li>
+            
 
         </nav>
 
         <!-- 添加收货地址 -->
-        <router-link tag="div" id="add" to="myaddress/xxx">
+        <router-link tag="div" id="add" to="addaddress/add">
             <van-icon name="plus"  color="#f38339"/>
             <span>添加收获地址</span>
         </router-link>
@@ -42,21 +44,35 @@
 
 
 <script>
-import BS from 'better-scroll'
-import {getClassify} from 'api/api.js'
+import {mapState} from 'vuex'
+import {getAddress} from 'api/api.js'
 export default {
     data(){
         return{
-
+            addressList:[],
         }
+    },
+    computed:{
+        ...mapState(['userMsg']),
     },
     methods: {
        back(){
            this.$router.go(-1);
        },
+       editaddress(Id){  //把ID传入地址
+        this.$router.push(`addaddress/${Id}`)
+            console.log(Id)
+       }
     },
     mounted(){
-    
+        let obj={token:this.userMsg.token}
+        getAddress(obj)
+        .then((res)=>{
+            console.log(res.result.resArr)
+            this.addressList=res.result.resArr 
+            // 将收货地址存入store
+            
+        })
     }
 }
 </script>
@@ -86,11 +102,18 @@ export default {
             justify-content: space-around;
             font-size: 0.14rem;
             font-weight: 500;
+            border-bottom: 1px solid gray;
+            position: relative;
             p{
                 span{
                     display: inline-block;
                     margin: 0 0.03rem;
                 }
+            }
+            .edit{
+                position: absolute;
+                right: 0.2rem;
+                top: 0.15rem;
             }
         }
     }

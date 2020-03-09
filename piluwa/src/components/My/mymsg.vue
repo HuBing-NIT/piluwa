@@ -13,12 +13,40 @@
         <!-- 会员信息列表 -->
         <div class="msgList">
             <!-- 基本信息 -->
-            <div class="msg base" v-for="(item,index) in 4" :key="index">
+            <div class="msg base">
                 <!-- 左侧字段 -->
                 <span class="msg-l">头像</span>
                 <!-- 右侧数据 -->
                 <div class="msg-r">
-                    <span>无</span>
+                    <!-- <span>无</span> -->
+                        <img :src="mymsg.avatarImg" alt="">
+                    <van-icon name="arrow" />
+                </div>
+            </div>
+             <div class="msg base">
+                <!-- 左侧字段 -->
+                <span class="msg-l">名称</span>
+                <!-- 右侧数据 -->
+                <div class="msg-r">
+                    <span>{{mymsg.nickName}}</span>
+                    <van-icon name="arrow" />
+                </div>
+            </div>
+             <div class="msg base">
+                <!-- 左侧字段 -->
+                <span class="msg-l">性别</span>
+                <!-- 右侧数据 -->
+                <div class="msg-r">
+                    <span>{{getsex}}</span>
+                    <van-icon name="arrow" />
+                </div>
+            </div>
+             <div class="msg base">
+                <!-- 左侧字段 -->
+                <span class="msg-l">手机</span>
+                <!-- 右侧数据 -->
+                <div class="msg-r">
+                    <span>{{mymsg.phone}}</span>
                     <van-icon name="arrow" />
                 </div>
             </div>
@@ -54,13 +82,24 @@
 
 
 <script>
-import BS from 'better-scroll'
-import {getClassify} from 'api/api.js'
+
+import {getMymsg} from 'api/api.js'
+import {mapState} from 'vuex'
 export default {
     data(){
         return{
             title:'',
-            sList:[],
+            mymsg:{},
+        }
+    },
+    computed:{
+        ...mapState(['userMsg']),
+        getsex(){ 
+            if(this.mymsg.sex==1){
+                return '男'
+            }else{
+                return '女'
+            }
         }
     },
     methods: {
@@ -69,7 +108,12 @@ export default {
        },
     },
     mounted(){
-    
+        let obj={token:this.userMsg.token}
+        getMymsg(obj)
+        .then((res)=>{
+            this.mymsg=res.result;
+            console.log(this.mymsg)
+        })
     }
 }
 </script>
@@ -97,6 +141,14 @@ export default {
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid #f6f6f6;
+            .msg-r{
+                display: flex;
+                align-items: center;
+            }
+            }
+            
+            img{
+                width: 0.4rem;
             }
             .address{
                 margin: 0.1rem 0;

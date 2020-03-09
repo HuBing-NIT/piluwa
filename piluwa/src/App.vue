@@ -13,8 +13,20 @@
 <script>
 import foot from 'components/Footer/footer.vue'
 import heade from 'components/Header/header.vue'
+import {mapState,mapMutations} from 'vuex';
 export default {
-  components:{foot,heade}
+  components:{foot,heade},
+   computed:{
+        ...mapState(['userMsg'])
+    },
+    methods: {
+        ...mapMutations(['changeLoginState']),
+    },
+    mounted(){
+      // localstrong取出loginMsg  保存到store
+        let obj=JSON.parse(localStorage.getItem('loginMsg'))
+        this.changeLoginState(obj)
+    }
 }
 
 

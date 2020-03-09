@@ -4,7 +4,13 @@
        <div class="LoginState">
            <!-- 登录成功显示 -->
             <div class="login" v-if="LoginState" @click='Tomymsg'>
-               登陆成功
+                <div class="avatar">
+                   <img :src="userMsg.avatarImg" alt=""> 
+                </div>
+                <div class="loginname">
+                   <span>{{userMsg.phone}}</span>
+                   <span>男</span>
+                </div>
             </div>
             <!-- 未登录显示 -->
             <div class="nologin" v-else >
@@ -56,28 +62,45 @@
 
 
 <script>
+import {mapState,mapMutations} from 'vuex';
 export default {
     data(){
         return {
-            LoginState:true,
+            LoginState:false,
             orderarr:[{icon: 'daifukuan',title: '待付款'},{icon: 'daifahuo',title: '待发货'},{icon: 'daishouhuo',title: '待收货'},{icon: 'qianshou-',title: '已收货'}],
             arr:[{icon: 'biaodan',title: '我的表单'},{icon: 'huiyuanqia',title: '我的会员卡'},{icon: 'wodejifen',title: '我的积分'},{icon: 'wodeyouhuiquan',title: '我的优惠券'},
             {icon: 'yue',title: '我的余额'},{icon: 'kanjiashangcheng',title: '我的砍价'},{icon: 'icon',title: '推广员中心'},{icon: 'shouhuoren',title: '收货人信息'}]
         }
     },
+    computed:{
+        ...mapState(['userMsg'])
+    },
     methods: {
+        ...mapMutations(['changeLoginState']),
         login(){
             this.$router.push('/tologin');
-            // this.LoginState=true;
         },
         loginout(index){
             // 点击的是最后一个tab才执行退出
             if(index==this.$refs.tab.length-1){
+                this.changeLoginState() //退出登录
+                console.log(this.userMsg,'退出登录')
                 this.LoginState=false;
+                // 清除localstrong
+                localStorage.setItem('loginMsg','')
             }
         },
         Tomymsg(){ //前往个人信息
             this.$router.push('/my/mymsg')
+        }
+    },
+    mounted(){    
+        if(this.userMsg.phone){//代表的是登录状态
+            console.log(this.userMsg,'自动登录')
+            this.LoginState=true;
+        }else{
+             console.log(this.userMsg,'未登录')
+            this.LoginState=false;
         }
     },
     watch:{
@@ -120,6 +143,33 @@ export default {
            font-size: 0.12rem;
            color: #ffff;
        }
+    }
+    .login{
+        width: 40%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        margin-left: 0.3rem;
+        .avatar{
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            img{
+                width: 0.5rem;
+            }
+        }
+        .loginname{
+            display: flex;
+            flex-direction: column;
+            margin-left: 0.08rem;
+            span{
+                display: inline-block;
+                margin: 0.05rem 0;
+                font-size: 0.12rem;
+            }
+        }
+        
     }
 }
 .myorder{

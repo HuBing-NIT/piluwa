@@ -5,13 +5,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        // nowPage: '首页', //当前页面title
+        userMsg: {},
     },
     mutations: {
-        // 改变页面title
-        // changePage(state, str) {
-        //     state.nowPage = str;
-        // }
+        changeLoginState(state, obj) {
+            if (obj) { //登录
+                console.log('登录')
+                state.userMsg = obj
+            } else { //注销
+                console.log('注销')
+                state.userMsg = {}
+            }
+        }
     },
     actions: {},
     modules: {}

@@ -12,8 +12,7 @@
         <div id="content">
             <img src="../../../public/imgs/loginlogo.jpg" alt="">
             <input placeholder="请输入手机号码" name="" id="" v-model="logPhone">
-            <input placeholder="请输入密码" name="" id=""  v-model="logPass">
-            <span @click="getYzm">获取验证码</span>
+            <input placeholder="请输入密码" name="" id="" type="password" v-model="logPass">
             <div style="width:100%">
                  <van-button @click="login" color="linear-gradient(to right, #eb6202, #fe7e25)" round  size='large'>登录</van-button>
             </div>
@@ -33,7 +32,8 @@
 
 
 <script>
-import {Login,getCode} from 'api/api.js'
+import {Login} from 'api/api.js'
+import {mapState,mapMutations} from 'vuex'
 export default {
     data(){
         return{
@@ -41,7 +41,11 @@ export default {
             logPass:''
         }
     },
+    computed:{
+        ...mapState(['userMsg'])
+    },
     methods: {
+        ...mapMutations(['changeLoginState']),
         register(){
             this.$router.push('/tologin/register')
         },
@@ -51,22 +55,33 @@ export default {
         login(){
             let obj = {
                 phone:this.logPhone,
-                code:this.logPass
+                password:this.logPass
             }
             Login(obj).then((res)=>{
-                console.log('登录成功')
-                console.log(res)
+               if(res.status==0){
+                    this.$toast.success('登录成功');
+                    console.log('登录成功')
+                    let data = res.data[0];
+                    console.log(data)
+                    let obj = {
+                        phone:data.phone,
+                        sex:data.sex,
+                        avatarImg:data.avatarImg,
+                        token:data.token,
+                        address:data.address
+                    }
+                    // 写入localStorage
+                    localStorage.setItem('loginMsg',JSON.stringify(obj))
+                    console.log(obj)
+                    // 存入vuex 更改登录状态
+                    this.changeLoginState(obj)
+                    // 跳转我的页面
+                    this.$router.push('/my')
+               }else{
+                    this.$toast.fail('用户名或密码错误');
+               }
             })
         },
-        getYzm(){
-               let obj = {
-                    phone:this.logPhone,
-                    templateId:"537707"
-                }
-                getCode(obj).then((res)=>{
-                    console.log(res);
-                })
-        }
     }
 }
 </script>

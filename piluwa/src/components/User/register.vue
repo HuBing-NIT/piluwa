@@ -54,15 +54,11 @@ export default {
         resg(){
             // 如果注册成功 写入本地localstrong
             if(this.resPhone&&this.resPass&&this.phoneYzm&&this.checked){ //信息填写完毕进行提交注册
-                //     setTimeout(() => {
-                //     this.$router.replace('/home'); 
-                // }, 1000);
-                // 进行注册
                 let obj = {
                     phone:this.resPhone,
-                    code:this.phoneYzm
+                    code:this.phoneYzm,
+                    password:this.resPass
                 }
-                console.log(1)
                 register(obj).then((res)=>{
                     console.log(res)
                 })

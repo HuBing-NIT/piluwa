@@ -22,13 +22,14 @@ const routes = [{
             path: 'mymsg',
             component: mymsg,
             children: [{
-                path: 'myaddress',
-                component: myaddress,
-                children: [{
-                    path: ':address',
+                    path: 'myaddress',
+                    component: myaddress,
+                }, {
+                    path: 'addaddress/:addressId',
                     component: address,
-                }]
-            }]
+                }
+
+            ]
         }]
     },
     {

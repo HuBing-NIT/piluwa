@@ -24,8 +24,8 @@ export default {
     },
     mounted(){
       // localstrong取出loginMsg  保存到store
-        let obj=JSON.parse(localStorage.getItem('loginMsg'))
-        this.changeLoginState(obj)
+        // let obj=JSON.parse(localStorage.getItem('loginMsg'))
+        // this.changeLoginState(obj)
     }
 }
 

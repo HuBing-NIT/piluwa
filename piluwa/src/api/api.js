@@ -71,6 +71,13 @@ let addAddress = (parms) => {
     return axios.post(url, parms)
 }
 
+// 获得商品详情
+let getshopDetail = (parms) => { //参数是productId
+    let url = `${Host}/detail`
+    console.log(parms)
+    return axios.post(url, parms)
+}
+
 export {
     getBannerData,
     getRecommendData,
@@ -80,5 +87,6 @@ export {
     getClassify,
     getMymsg,
     getAddress,
-    addAddress
+    addAddress,
+    getshopDetail
 }

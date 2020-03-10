@@ -14,18 +14,14 @@
         <div class='wrapper' ref='Wrapper'>
             <div class='content'>
             <nav id="s-list">
-                <li v-for="(item,index) in sList" :key="index"  @click='todetail'>
-                    <img :src="item.imgUrl" alt="">
+                <li v-for="(item,index) in sList" :key="index"  @click='todetail(item.productId)'>
+                    <img v-lazy="item.imgUrl" alt="">
                     <span class="txt">{{item.title}}</span>
                     <span class="price">￥444.00</span>
                 </li>    
             </nav>
             </div>
         </div>
-
-     
-      
-        
     </div>
     </transition>
 </template>
@@ -57,9 +53,9 @@ export default {
             let wrapper = this.$refs.Wrapper
             this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
-        todetail(){
+        todetail(productId){
             // 跳转详情页
-            this.$router.push('/detail/详情页')
+            this.$router.push(`/detail/${productId}`)
         },
     },
     mounted(){

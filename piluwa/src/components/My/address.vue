@@ -100,21 +100,25 @@ export default {
                     address:this.getaddress,
                     status:2
                 }
-                addAddress(obj).then((res)=>{
-                    console.log(res)
-                    this.$router.push('myaddress/')
-                })      
+                    if(this.str!='add'){
+                        console.log('编辑')
+                    }else{
+                        addAddress(obj).then((res)=>{
+                        console.log('添加')
+                    })}
+                     this.$router.go(-1);
+                  
             }  
         }
     },
     mounted(){
         // 获取地址栏的值,判断是edit还是add
-        let str = this.$route.params.addressId;
-        if(str!='add'){ //表示是edit 进行渲染
+        this.str = this.$route.params.addressId;
+        if(this.str!='add'){ //表示是edit 进行渲染
             this.title='修改收货地址'
             console.log(this.userMsg,'store')
             this.userMsg.address.map((item)=>{
-                if(item._id==str){
+                if(item._id==this.str){
                         this.seladdress=item.address;
                         this.getName=item.getName;
                         this.getphone=item.getPhone; 

@@ -53,8 +53,8 @@
                 <span class="txt">推荐商品</span>
             </div>
             <nav class="content-list">
-                 <li class="rec-list" v-for="(item,index) in recList" :key="index">
-                     <img class="rec-img" :src="item.imgUrl" alt="">
+                 <li class="rec-list" v-for="(item,index) in recList" :key="index" @click="todetail(item.productId)">
+                     <img  class="rec-img" v-lazy="item.imgUrl" alt="">
                      <div class="rec-detail">
                          <span class="txt">{{item.productName}}</span>
                          <p>
@@ -86,16 +86,21 @@ export default {
             recList:[], //推荐商品列表
         }
     },
+    methods:{
+        todetail(productId){
+              this.$router.push(`/detail/${productId}`)
+        }
+    },
     mounted(){
         // 请求banner图片
-        getBannerData().then((res)=>{
-            // console.log(res)
-            this.urllist=res.result.list
-            // console.log(this.urllist)
-        })
+        // getBannerData().then((res)=>{
+        //     // console.log(res)
+        //     this.urllist=res.result.list
+        //     // console.log(this.urllist)
+        // })
         // 请求推荐商品
         getRecommendData().then((res)=>{
-            // console.log(res.result.list)
+            console.log(res.result.list)
             this.recList =res.result.list
         })
     }

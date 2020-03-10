@@ -25,6 +25,14 @@ Vue.use(Vant);
 // import { Toast } from 'vant';
 // Vue.use(Toast);
 
+// 图片懒加载
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload, {
+    preLoad: 1.3,
+    loading: '/load.gif',
+    attempt: 1
+})
+
 
 Vue.config.productionTip = false
 

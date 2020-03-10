@@ -69,9 +69,7 @@ export default {
         getAddress(obj)
         .then((res)=>{
             console.log(res.result.resArr)
-            this.addressList=res.result.resArr 
-            // 将收货地址存入store
-            
+            this.addressList=res.result.resArr    
         })
     }
 }

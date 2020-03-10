@@ -24,7 +24,7 @@
             </nav>
             <!-- 右侧类别对应商品 -->
             <nav class="list-r">
-                <li v-for="(item,index) in TypeList" :key="index">
+                <li v-for="(item,index) in TypeList" :key="index" @click='todetail(item.productId)'>
                     <img :src="item.imgUrl" alt="">
                     <span>{{item.title}}</span>
                 </li>   
@@ -60,7 +60,11 @@ export default {
                  console.log(res)
                  this.TypeList=res.result;
              })
-        }
+        },
+        todetail(productId){
+            // 跳转详情页
+            this.$router.push(`/detail/${productId}`)
+        },
     },
     mounted(){
         // 挂在组件时请求数据

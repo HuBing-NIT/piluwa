@@ -87,14 +87,16 @@ export default {
                 console.log(this.userMsg,'退出登录')
                 this.LoginState=false;
                 // 清除localstrong
-                localStorage.setItem('loginMsg','')
+                localStorage.setItem('loginMsg',{})
             }
         },
         Tomymsg(){ //前往个人信息
             this.$router.push('/my/mymsg')
         }
     },
-    mounted(){    
+    mounted(){  
+        let obj=JSON.parse(localStorage.getItem('loginMsg'))
+        this.changeLoginState(obj)
         if(this.userMsg.phone){//代表的是登录状态
             console.log(this.userMsg,'自动登录')
             this.LoginState=true;

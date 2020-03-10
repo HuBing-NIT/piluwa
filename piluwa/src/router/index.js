@@ -14,6 +14,12 @@ import mymsg from 'components/My/mymsg.vue'
 import myaddress from 'components/My/myaddress.vue'
 import address from 'components/My/address.vue'
 
+
+import { Dialog } from 'vant';
+import IsLogin from '../untils/IsLogin.js'
+// const router = new VueRouter()
+
+
 // Vue.component({ tologin })
 const routes = [{
         path: '/my',
@@ -33,7 +39,7 @@ const routes = [{
         }]
     },
     {
-        path: '/detail/:shopname',
+        path: '/detail/:productId',
         component: shopDetail,
     },
     {
@@ -65,6 +71,11 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
+})
+router.beforeEach((to, from, next) => {
+    // 检查本地的user记录
+    IsLogin(Dialog);
+    next()
 })
 
 export default router

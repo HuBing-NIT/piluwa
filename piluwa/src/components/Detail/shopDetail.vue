@@ -154,23 +154,26 @@ export default {
             // 先取出本地localstrong 
             try {//存在的情况
                let obj =  JSON.parse(localStorage.getItem('userCart'))
-               if(obj.token==this.userMsg.token){
+               let bool = false;
+               if(obj.token==this.userMsg.token){  //token验证 匹配用户
                     let cart = obj.cart; //取出购物车信息 判断商品是否一致
                     cart.map((item)=>{
-                        if(item.productId==this.detailData.productId){
+                        if(item.productId==this.detailData.productId){ //商品ID匹配 一样表示为同件商品
+                            bool=true//为同一件商品            
                             item.count+=this.count
+                            console.log('同个商品')
+                            obj.cart=cart;
+                            localStorage.setItem('userCart', JSON.stringify(obj))     //更新localstrong
+                            return
                         }
                     })
-                    obj.cart=cart;
-                    localStorage.setItem('userCart', JSON.stringify(obj))
-                    console.log('同个商品')
-                }else{
-                      obj.cart.push(this.cartobj)
-                    // 更新localstrong
-                    localStorage.setItem('userCart', JSON.stringify(obj)) 
-                    console.log('不存在')
+                    if(bool==false){
+                        obj.cart.push(this.cartobj)
+                        localStorage.setItem('userCart', JSON.stringify(obj))  // 更新localstrong
+                        console.log('不是同个商品')
+                    }
+                    
                 }
-
             } catch (error) {
                 let newobj = {token:this.userMsg.token,cart:[]}
                 newobj.cart.push(this.cartobj)

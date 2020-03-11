@@ -1,5 +1,8 @@
 <template>
     <div id="classify">
+
+    <div class='wrapper' ref='Wrapper'>
+        <div class='content'>      
         <!-- 顶部搜索框 -->
         <div class="search">
             <van-search
@@ -31,11 +34,14 @@
                
             </nav>
         </div>
+        </div>
+    </div>
     </div>
 </template>
 
 
 <script>
+import BS from 'better-scroll'
 import {getClassify} from 'api/api.js'
 export default {
     data(){
@@ -57,19 +63,26 @@ export default {
         // 请求类别数据
         getType(index){
              getClassify(index).then((res)=>{
-                 console.log(res)
-                 this.TypeList=res.result;
+                console.log(res)
+                this.TypeList=res.result;
+                this.$nextTick(()=>{
+                    this.initBs();
+                })
              })
         },
         todetail(productId){
             // 跳转详情页
             this.$router.push(`/detail/${productId}`)
         },
+        initBs(){
+            let wrapper = this.$refs.Wrapper
+            this.Bs = new BS(wrapper,{probeType:3,click:true})
+        },
     },
     mounted(){
         // 挂在组件时请求数据
         this.getType(1)
-    
+        
     }
 }
 
@@ -77,6 +90,15 @@ export default {
 
 
 <style lang="less" scoped>
+.wrapper{
+        width: 100%;
+        height: 100%;
+        // background: red;
+        overflow: hidden;
+         .content{
+
+         }
+ }
      #classify{
         width: 100%;
         // background: red;

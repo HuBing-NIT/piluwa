@@ -1,7 +1,13 @@
 <template>
     <div id="home">
+
+    <div class='wrapper' ref='Wrapper'>
+        <div class='content'>   
         <!-- 轮播图 -->
-        <banner :urllist='urllist'></banner>
+        <div id="banner">
+            <img src="../../../public/imgs/banner1.jpg" alt="">
+        </div>
+        <!-- <banner :urllist='urllist'></banner> -->
         <!-- menu菜单1 -->
         <div id="menu-1">
             <div class="menu-1-btn">
@@ -68,14 +74,17 @@
             </nav>
         </div>
         
-    <!-- <keep-alive> -->
-        <router-view></router-view>
-    <!-- </keep-alive> -->
+
+       
+        </div>
+         <router-view></router-view>
+    </div>
     </div>
 </template>
 
 
 <script>
+import BS from 'better-scroll'
 import {getBannerData,getRecommendData} from 'api/api.js'
 import banner from 'components/Banner/banner.vue'
 export default {
@@ -89,19 +98,20 @@ export default {
     methods:{
         todetail(productId){
               this.$router.push(`/detail/${productId}`)
-        }
+        },
+         initBs(){
+            let wrapper = this.$refs.Wrapper
+            this.Bs = new BS(wrapper,{probeType:3,click:true})
+        },
     },
     mounted(){
-        // 请求banner图片
-        // getBannerData().then((res)=>{
-        //     // console.log(res)
-        //     this.urllist=res.result.list
-        //     // console.log(this.urllist)
-        // })
         // 请求推荐商品
         getRecommendData().then((res)=>{
             console.log(res.result.list)
             this.recList =res.result.list
+            this.$nextTick(()=>{
+                this.initBs();
+            })
         })
     }
 }
@@ -109,12 +119,25 @@ export default {
 
 
 <style lang="less" scoped>
+.wrapper{
+        width: 100%;
+        height: 100%;
+        // background: red;
+        overflow: hidden;
+         .content{
+
+         }
+ }
     #home{
         width: 100%;
         // background: red;
         position: absolute;
         top: 0.48rem;
         bottom: 0.49rem;
+        #banner{
+            width: 3.75rem;
+            height: 2.06rem;
+        }
         #menu-1{
             width: 100%;
             height: 1.2rem;

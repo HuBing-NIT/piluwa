@@ -2,7 +2,7 @@
   <div id="app">
     <heade></heade>
 
-    <router-view class="view"></router-view>
+              <router-view class="view"></router-view>
 
     <foot></foot>
   </div>
@@ -43,6 +43,17 @@ export default {
   // text-align: center;
   color: #2c3e50;
 }
+
+ .wrapper{
+        width: 100%;
+        height: 100%;
+        // background: red;
+        overflow: hidden;
+
+         .content{
+
+         }
+ }
 .view{
   // position: absolute;
   // top: 0.48rem;

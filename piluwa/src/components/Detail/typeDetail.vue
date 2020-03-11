@@ -79,7 +79,7 @@ export default {
     }
     .wrapper{
         width: 100%;
-        height: 100%;
+        
         // background: red;
         overflow: hidden;
         background: #f7f7f7;   

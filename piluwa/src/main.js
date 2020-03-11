@@ -20,6 +20,7 @@ import 'animate.css/animate.css'
 
 // 导入vant组件库
 import Vant from 'vant';
+import { Dialog } from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
 // import { Toast } from 'vant';
@@ -35,6 +36,39 @@ Vue.use(VueLazyload, {
 
 
 Vue.config.productionTip = false
+
+
+
+router.beforeEach((to, from, next) => {
+    /* 路由发生变化修改页面title */
+    let path = to.path.split('/');
+    let title = path[1]
+    store.commit('changeTitle', title) //更新title
+        // let obj = JSON.parse(localStorage.getItem('loginMsg'))
+    try {
+        // 获取本地用户信息
+        console.log('获取')
+        let obj = JSON.parse(localStorage.getItem('loginMsg'))
+    } catch (error) {
+        console.log(path.length)
+        if (path.length <= 2) {
+            Dialog.confirm({
+                title: '当前未登录',
+                message: '点击确定跳转'
+            }).then(() => {
+                router.push('/tologin/login')
+            }).catch(() => {
+
+            });
+        }
+    }
+
+
+    // this.$store.commit('changeTitle', to.path)
+    // console.log(to.path)
+    next()
+})
+
 
 
 

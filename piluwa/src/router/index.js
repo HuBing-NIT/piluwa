@@ -1,18 +1,30 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
-import my from 'components/My/my.vue'
-import home from 'components/Home/home.vue'
-import cart from 'components/Cart/cart.vue'
-import classify from 'components/Classify/classify.vue'
-import tologin from 'components/User/tologin.vue'
-import register from 'components/User/register.vue'
-import login from 'components/User/login.vue'
-import typeDetail from 'components/Detail/typeDetail.vue'
-import shopDetail from 'components/Detail/shopDetail.vue'
-import mymsg from 'components/My/mymsg.vue'
-import myaddress from 'components/My/myaddress.vue'
-import address from 'components/My/address.vue'
+const my = () =>
+    import ('components/My/my.vue')
+const home = () =>
+    import ('components/Home/home.vue')
+const cart = () =>
+    import ('components/Cart/cart.vue')
+const classify = () =>
+    import ('components/Classify/classify.vue')
+const tologin = () =>
+    import ('components/User/tologin.vue')
+const register = () =>
+    import ('components/User/register.vue')
+const login = () =>
+    import ('components/User/login.vue')
+const typeDetail = () =>
+    import ('components/Detail/typeDetail.vue')
+const shopDetail = () =>
+    import ('components/Detail/shopDetail.vue')
+const mymsg = () =>
+    import ('components/My/mymsg.vue')
+const myaddress = () =>
+    import ('components/My/myaddress.vue')
+const address = () =>
+    import ('components/My/address.vue')
 
 
 import { Dialog } from 'vant';
@@ -24,6 +36,7 @@ import IsLogin from '../untils/IsLogin.js'
 const routes = [{
         path: '/my',
         component: my,
+
         children: [{
             path: 'mymsg',
             component: mymsg,
@@ -68,14 +81,14 @@ const routes = [{
 ]
 
 const router = new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes
-})
-router.beforeEach((to, from, next) => {
-    // 检查本地的user记录
-    IsLogin(Dialog);
-    next()
-})
+        mode: 'history',
+        base: process.env.BASE_URL,
+        routes
+    })
+    // router.beforeEach((to, from, next) => {
+    //     // 检查本地的user记录
+    //     IsLogin(Dialog);
+    //     next()
+    // })
 
 export default router

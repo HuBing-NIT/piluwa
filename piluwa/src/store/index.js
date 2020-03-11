@@ -6,6 +6,17 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         userMsg: {},
+        nowpageTitle: '首页',
+        Cartcount: 0,
+    },
+    getters: {
+        Title(state) {
+            if (state.nowpageTitle == '购物车') {
+                return state.nowpageTitle + `(${state.Cartcount})`
+            } else {
+                return state.nowpageTitle
+            }
+        }
     },
     mutations: {
         changeLoginState(state, obj) {
@@ -16,6 +27,22 @@ export default new Vuex.Store({
                 console.log('注销')
                 state.userMsg = {}
             }
+        },
+        changeCartcount(state, count) { //改变购物车数量
+            console.log(count)
+            state.Cartcount = count
+        },
+        changeTitle(state, title) { //改变titile
+            if (title == 'home') {
+                state.nowpageTitle = '主页'
+            } else if (title == 'my') {
+                state.nowpageTitle = '我的'
+            } else if (title == 'cart') {
+                state.nowpageTitle = '购物车'
+            } else if (title == 'classify') {
+                state.nowpageTitle = '分类'
+            }
+
         }
     },
     actions: {},

@@ -2,28 +2,28 @@
     <div id="footer">
         <!-- <router-link to="/home" tag="div" class="menu" @click='changePage()'> -->
         <router-link to="/home" tag="div" class="menu" >
-            <van-icon class="iconfont" class-prefix='icon' name='tubiao-1'  />
+            <van-icon class="iconfont" class-prefix='icon' name='tubiao-1'  @click='changeTitle("首页")' />
             <span class="txt">
                 首页
             </span>
         </router-link>
         <router-link to="/classify" tag="div" class="menu" >
-             <van-icon class="iconfont" class-prefix='icon' name='tubiao-1'  />
+             <van-icon class="iconfont" class-prefix='icon' name='tubiao-1' @click='changeTitle("分类")' />
             <span class="txt">
                 分类
             </span>
         </router-link>
         <router-link to="/cart" tag="div" class="menu" >
-            <van-icon class="iconfont" class-prefix='icon' name='tubiao-1' />
+            <van-icon class="iconfont" class-prefix='icon' name='tubiao-1' @click='changeTitle("购物车")' />
             <span class="txt">
                 购物车
             </span>
         </router-link>
         <router-link to="/my" tag="div" class="menu"  >
-              <!-- <svg class="icon"  aria-hidden="true" @click='changePage("我的")'>
+              <!-- <svg class="icon"  aria-hidden="true" @click='changeTitlePage("我的")'>
                 <use xlink:href="#icon-tubiao-1"></use>
              </svg> -->
-            <van-icon class="iconfont" class-prefix='icon' name='tubiao-1'  />
+            <van-icon class="iconfont" class-prefix='icon' name='tubiao-1'  @click='changeTitle("我的")' />
             <span class="txt">
                 我的
             </span>
@@ -42,7 +42,11 @@ export default {
         }
     },
     methods:{
-        // ...mapMutations(['changePage'])
+        ...mapMutations(['changeTitle']),
+        change(title){
+           
+            this.$store.commit('changeTitle',params)
+        }
     }
     
 }

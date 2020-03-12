@@ -43,29 +43,33 @@ router.beforeEach((to, from, next) => {
     /* 路由发生变化修改页面title */
     let path = to.path.split('/');
     let title = path[1]
+    console.log(this)
     store.commit('changeTitle', title) //更新title
-        // let obj = JSON.parse(localStorage.getItem('loginMsg'))
+   
     try {
         // 获取本地用户信息
         console.log('获取')
         let obj = JSON.parse(localStorage.getItem('loginMsg'))
-    } catch (error) {
-        console.log(path.length)
-        if (path.length <= 2) {
-            Dialog.confirm({
-                title: '当前未登录',
-                message: '点击确定跳转'
-            }).then(() => {
-                router.push('/tologin/login')
-            }).catch(() => {
+        if(!obj){  //本地无用户信息
+            if (path.length <= 2) {
+                Dialog.confirm({
+                    title: '当前未登录',
+                    message: '点击确定跳转'
+                }).then(() => {
+                    router.push('/tologin/login')
+                }).catch(() => {
+    
+                });
+            }
+        }else{
 
-            });
+            if(store.state.flag==1){
+                // 将本地信息写入state,且只执行一次 
+                console.log('存入++++++++++++++')
+                store.commit('changeLoginState',obj) 
+            }
         }
-    }
-
-
-    // this.$store.commit('changeTitle', to.path)
-    // console.log(to.path)
+    } catch (error) {}
     next()
 })
 

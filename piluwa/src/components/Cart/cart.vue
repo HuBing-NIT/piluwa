@@ -31,7 +31,7 @@
                             <p style="font-size:0.13rem;color:#9f9f9f">{{item.standardsTitle}}:{{item.selstandardsItem}}</p>
                             <div class="s-price">
                                 <p style="color:#b14e44">￥<span style="font-size:0.14rem" ref="prices">{{item.price}}</span></p>
-                                <van-stepper v-model="valueList[index]" integer />
+                                <van-stepper @plus='plus(index)' @minus='minus(index)' v-model="valueList[index]" integer />
                             </div>
                         </section>
                     </div>
@@ -66,7 +66,7 @@
 
 
 <script>
-import {mapMutations} from 'vuex'
+import {mapMutations,mapState} from 'vuex'
 import BS from 'better-scroll'
 export default {
     data(){
@@ -81,10 +81,10 @@ export default {
         }  
     },
     computed:{
+        ...mapState(['userMsg']),
         allcount(){ //计算总数量
             let all=0;
             this.valueList.map((item)=>{
-                console.log(item)
                 all+=item
             })
             return all;
@@ -103,7 +103,6 @@ export default {
             this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
         jumpdetail(productId){
-             console.log(this.result)
              this.$router.push(`/detail/${productId}`)
         },
         changesel(){//全选与反选
@@ -160,35 +159,41 @@ export default {
             // return  { s_price:calprice,s_count:selcount }
             return  { s_price:calprice }
         },
-        change(){
-
-        },
-        XXX(){
-
-            for(let i =0;i<this.cartList;i++){
-                if(this.result[i]==i){
-                    this.allprice += this.valueList[i]*this.cartList[i].price
-                }
+        minus(index){ //计数器减少触发
+            if(this.result.indexOf(index)!=-1){
+                  this.valueList[index]--;
+                this.cartList[index].count = this.valueList[index]; //更新数量
+                this.updataLocal();//更新本地
+                this.$store.commit('changeCartcount',this.allcount)
+                this.allprice -= this.cartList[index].price
             }
-            console.log(this.allprice)
         },
+        plus(index){//计数器增加触发
+            if(this.result.indexOf(index)!=-1){
+                this.valueList[index]++;
+                this.cartList[index].count = this.valueList[index]; //更新数量
+                this.updataLocal();//更新本地
+                this.$store.commit('changeCartcount',this.allcount) //更新store总count
+                this.allprice += this.cartList[index].price //更新价格
+            }
+        }
     },
     watch:{
-        valueList(news,olds){  //监听数量的变化
+        // valueList(news,olds){  //监听数量的变化
             
-            news.map((item,index)=>{ //index索引
-                //判断是否选中
-                if(this.result.indexOf(index)!=-1){   
-                        this.cartList[index].count = item;    //更新数量
-                        this.updataLocal();//更新本地
-                        this.$store.commit('changeCartcount',this.allcount)      // 更新store全局的allcount
-                        this.allprice += this.cartList[index].price
-                }
+        //     news.map((item,index)=>{ //index索引
+        //         //判断是否选中
+        //         if(this.result.indexOf(index)!=-1){   
+        //                 this.cartList[index].count = item;    //更新数量
+        //                 this.updataLocal();//更新本地
+        //                 this.$store.commit('changeCartcount',this.allcount)      // 更新store全局的allcount
+        //                 this.allprice -= this.cartList[index].price
+        //         }
 
-            })
-        },
+        //     })
+        // },
         result(news,olds){  //监听勾选的商品
-            console.log(news) //获得选中商品的价格和数量
+            // console.log(news) //获得选中商品的价格和数量
             // let allcount=0;
             this.allprice=0;
             news.map((item)=>{
@@ -198,27 +203,33 @@ export default {
         } 
     },
     mounted(){
-        // 判断本地localstrong是否有商品  
-        try { 
-            let objcart =  JSON.parse(localStorage.getItem('userCart'));
-            if(objcart.cart){
-                this.Hasshop=false
-                this.cartList=objcart.cart  //购物车列表赋值
-                
-                for(let index=0;index<this.cartList.length;index++){
-                    this.valueList.push(this.cartList[index].count)
+        if(this.userMsg.phone){  //如果是登录状态 
+            // 判断本地localstrong是否有商品  
+            try { 
+                let objcart =  JSON.parse(localStorage.getItem('userCart'));
+                if(objcart.cart){
+                    this.Hasshop=false
+                    this.cartList=objcart.cart  //购物车列表赋值
+                    
+                    for(let index=0;index<this.cartList.length;index++){
+                        this.valueList.push(this.cartList[index].count)
+                    }
+                    this.$store.commit('changeCartcount',this.allcount) 
+                    this.$nextTick(()=>{
+                        this.initBs();
+                    })
                 }
-                this.$store.commit('changeCartcount',this.allcount) 
-                this.$nextTick(()=>{
-                     this.initBs();
-                })
-            }
-            
-        } catch (error) { //无商品
-        console.log(error)
+                
+            } catch (error) { //无商品
+            console.log(error)
+                this.Hasshop=true
+                console.log('购物车无商品')
+            }     
+        }else{ //不是登录状态
             this.Hasshop=true
-            console.log('购物车无商品')
+            this.$store.commit('changeCartcount',0) 
         }
+       
        
     },
     

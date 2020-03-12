@@ -68,7 +68,7 @@
                 <div class="sel">
                     <div>
                         <span>商品评论</span>
-                        <span style="margin-left:0.1rem">(0)</span>
+                        <span style="margin-left:0.1rem">0</span>
                     </div>
                     <van-icon name="arrow" />
                 </div>
@@ -79,7 +79,7 @@
         <div class="addCart">
             <van-goods-action>
             <van-goods-action-icon icon="chat-o" text="客服"  />
-            <van-goods-action-icon icon="cart-o" text="购物车" to='/cart' info="5" />
+            <van-goods-action-icon icon="cart-o" text="购物车" to='/cart' :info="Cartcount" />
             <van-goods-action-button type="warning" text="加入购物车" @click='addCart' />
             <van-goods-action-button type="danger" text="立即购买" />
             </van-goods-action>
@@ -109,9 +109,10 @@ export default {
         }
     },
     computed:{
-        ...mapState(['userMsg'])
+        ...mapState(['userMsg','Cartcount'])
     },
     methods:{
+        ...mapMutations(['changeCartcount']),
         back(){
             this.$router.go(-1);
         },
@@ -155,7 +156,9 @@ export default {
             try {//存在的情况
                let obj =  JSON.parse(localStorage.getItem('userCart'))
                let bool = false;
-               if(obj.token==this.userMsg.token){  //token验证 匹配用户
+               console.log(obj.token,this.userMsg.token)
+               if(this.userMsg.token){  //token验证 匹配用户
+                    console.log('匹配token')
                     let cart = obj.cart; //取出购物车信息 判断商品是否一致
                     cart.map((item)=>{
                         if(item.productId==this.detailData.productId){ //商品ID匹配 一样表示为同件商品
@@ -182,6 +185,7 @@ export default {
                 console.log('不存在')
             }
             this.$toast.success('成功加入购物车');
+            this.changeCartcount(this.count+this.Cartcount)  // 改变  store中 cartcount
             
         }
         

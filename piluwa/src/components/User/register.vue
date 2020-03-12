@@ -16,7 +16,7 @@
                  <span v-else>{{time}}S后重试</span>
             </div>
             <!-- 登录密码 -->
-            <input class="input" placeholder="请设置登录密码" type="text" name="" id="" v-model="resPass">
+            <input class="input" placeholder="请设置登录密码" type="password" name="" id="" v-model="resPass">
 
             <!-- 用户协议勾选 -->
 
@@ -60,7 +60,11 @@ export default {
                     password:this.resPass
                 }
                 register(obj).then((res)=>{
-                    console.log(res)
+                    console.log(res.result)
+                    localStorage.setItem('loginMsg',JSON.stringify(res.result))
+                    // 注册成功
+                    this.$router.replace('/my')
+                    // console.log('登录成功',未做跳转)
                 })
             }else if(!this.checked){
                 this.$toast('请勾选用户协议')

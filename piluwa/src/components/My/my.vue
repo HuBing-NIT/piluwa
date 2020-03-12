@@ -87,7 +87,8 @@ export default {
                 console.log(this.userMsg,'退出登录')
                 this.LoginState=false;
                 // 清除localstrong
-                localStorage.setItem('loginMsg',{})
+                localStorage.removeItem('loginMsg')
+                // 
             }
         },
         Tomymsg(){ //前往个人信息
@@ -95,10 +96,12 @@ export default {
         }
     },
     mounted(){  
-        let obj=JSON.parse(localStorage.getItem('loginMsg'))
-        this.changeLoginState(obj)
-        if(this.userMsg.phone){//代表的是登录状态
+        // let obj=JSON.parse(localStorage.getItem('loginMsg'))
+        // this.changeLoginState(obj)
+        
+        if(this.userMsg.phone){//store 中存在用户信息 自动登录状态
             console.log(this.userMsg,'自动登录')
+            
             this.LoginState=true;
         }else{
              console.log(this.userMsg,'未登录')

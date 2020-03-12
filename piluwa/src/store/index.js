@@ -8,6 +8,7 @@ export default new Vuex.Store({
         userMsg: {},
         nowpageTitle: '首页',
         Cartcount: 0,
+        flag:1,
     },
     getters: {
         Title(state) {
@@ -23,9 +24,11 @@ export default new Vuex.Store({
             if (obj) { //登录
                 console.log('登录')
                 state.userMsg = obj
+                state.flag++;
             } else { //注销
                 console.log('注销')
                 state.userMsg = {}
+                state.flag--;
             }
         },
         changeCartcount(state, count) { //改变购物车数量

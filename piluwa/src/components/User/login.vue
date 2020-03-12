@@ -68,7 +68,6 @@ export default {
                         sex:data.sex,
                         avatarImg:data.avatarImg,
                         token:data.token,
-                        address:data.address
                     }
                     // 写入localStorage
                     localStorage.setItem('loginMsg',JSON.stringify(obj))

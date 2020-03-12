@@ -137,6 +137,9 @@ export default {
         #banner{
             width: 3.75rem;
             height: 2.06rem;
+            img{
+                width: 100%;
+            }
         }
         #menu-1{
             width: 100%;

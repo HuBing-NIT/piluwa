@@ -11,9 +11,9 @@ import axios from 'axios';
 // }]
 
 
-let Host = 'http://47.97.244.129:3001'
+// let Host = 'http://47.97.244.129:3001'
 
-
+let Host = 'http://localhost:3001'
 // let Host = 'http://www.pudge.wang:3001'
 
 // 首页
@@ -65,6 +65,12 @@ let getAddress = (parms) => {
     return axios.post(url, parms)
 }
 
+// 获取详细地址
+let getDetailAddress = (parms) =>{
+    let url =  `${Host}/address/getaddressById`
+    return axios.post(url,parms)
+}
+
 // 添加地址
 let addAddress = (parms) => {
     let url = `${Host}/address/add`
@@ -88,5 +94,6 @@ export {
     getMymsg,
     getAddress,
     addAddress,
-    getshopDetail
+    getshopDetail,
+    getDetailAddress
 }

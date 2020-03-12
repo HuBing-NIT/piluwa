@@ -21,7 +21,7 @@
             <li class="zoon"> 
                 <van-cell is-link @click="showPopup" style="padding:10px 30px 10px 0">{{seladdress}}</van-cell>
                 <van-popup v-model="show" position="bottom" :style="{ height: '30%' }">
-                    <van-area :area-list="areaList"  @confirm='checkmsg'/>
+                    <van-area :area-list="areaList" @cancel='cancel'  @confirm='checkmsg'/>
                 </van-popup>
             </li>
             <li >
@@ -36,7 +36,7 @@
         </nav>
         <!-- 确认-->
         <div id="check" @click="submit" ref="checksubmit">
-            确认
+            {{bottomTxt}}
         </div>
     </div>
     </transition>
@@ -46,7 +46,7 @@
 <script>
 import {mapState} from 'vuex'
 import address from '../../untils/address.js'
-import {addAddress} from 'api/api.js'
+import {addAddress,getDetailAddress} from 'api/api.js'
 export default {
    data() {
     return {
@@ -58,16 +58,18 @@ export default {
       getName:'',  //姓名
       getphone:'',  //电话
       Detail:'',   //详细地址
+      bottomTxt:'确定',
 
     }
   },
    computed:{
         ...mapState(['userMsg']),
         getaddress(){
-            return this.seladdress+' '+this.Detail
+            return this.seladdress+'-'+this.Detail
         }
     },
   methods: {
+     
         back(){
             this.$router.go(-1);
         },
@@ -83,6 +85,11 @@ export default {
             this.seladdress=str;
             this.show=false;
         },
+        cancel(){
+            console.log('哇哇哇哇哇')
+            this.show=false;
+            this.seladdress='请选择所在区域'
+        },
         watchchange(){
             if(this.seladdress&&this.getName&&this.getphone&&this.Detail){
                 this.$refs.checksubmit.style.background='red'
@@ -92,7 +99,7 @@ export default {
 
         },
         submit(){
-            if(this.seladdress&&this.getName&&this.getphone&&this.Detail){
+            if(this.seladdress!='请选择所在区域'&&this.getName&&this.getphone&&this.Detail){
                  let obj = {
                     token:this.userMsg.token,
                     getName:this.getName,
@@ -107,8 +114,9 @@ export default {
                         console.log('添加')
                     })}
                      this.$router.go(-1);
-                  
-            }  
+            } else{
+               this.$toast.fail('请补全地址信息');
+            }
         }
     },
     mounted(){
@@ -116,14 +124,14 @@ export default {
         this.str = this.$route.params.addressId;
         if(this.str!='add'){ //表示是edit 进行渲染
             this.title='修改收货地址'
-            console.log(this.userMsg,'store')
-            this.userMsg.address.map((item)=>{
-                if(item._id==this.str){
-                        this.seladdress=item.address;
-                        this.getName=item.getName;
-                        this.getphone=item.getPhone; 
-                        this.Detail=item.address;
-                }
+            this.bottomTxt='编辑'
+            let obj={addressId:this.str,token:this.userMsg.token}
+            getDetailAddress(obj).then((res)=>{
+                // console.log(res.result)
+                this.seladdress=res.result.address.split('-')[0];
+                this.getName=res.result.getName;
+                this.getphone=res.result.getPhone; 
+                this.Detail=res.result.address.split('-')[1];
             })
         }else{ //表示是添加 不做处理
             this.title='新增收货地址'

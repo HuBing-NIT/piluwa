@@ -18,7 +18,7 @@
                     <span>{{item.getPhone}}</span>
                 </p>
                 <p>
-                   <span>{{item.address}}</span>
+                   <span>{{item.address.replace('-',' ')}}</span>
                 </p>
                 <div class="edit" :addressId='item.addressId' @click="editaddress(item.addressId)" >
                     <van-icon   size="0.15rem" color="#f58232" name="records" />
@@ -69,7 +69,7 @@ export default {
         getAddress(obj)
         .then((res)=>{
             console.log(res.result.resArr)
-            this.addressList=res.result.resArr    
+            this.addressList=res.result.resArr;    
         })
     }
 }

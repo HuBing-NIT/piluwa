@@ -74,13 +74,21 @@ export default {
             console.log(Id)
        },
        deleteaddress(Id){ //删除地址
-            let parms={
-                addressId:Id,
-                token:this.userMsg.token
-            }
-            deleteAddress(parms).then((res)=>{
-                this.addressRender();
-            })
+        this.$dialog.confirm({
+            title: '删除',
+            message: '确定删除吗'
+            }).then(() => {
+                let parms={
+                    addressId:Id,
+                    token:this.userMsg.token
+                }
+                deleteAddress(parms).then((res)=>{
+                    this.addressRender();
+                })
+            }).catch(() => {
+          
+        }); 
+            
        },
         initBs(){
             let wrapper = this.$refs.Wrapper

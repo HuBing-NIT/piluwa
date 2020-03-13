@@ -139,53 +139,64 @@ export default {
                 forbidClick: true,
                 duration:500
             })
-            let str = this.detailData.standards.title + ':' +this.selstandardsItem+','+'数量'+':'+this.count
-            this.specification=str
-            this.cartobj={
-                img:this.detailData.imgUrl,
-                name:this.detailData.productName,
-                price:this.detailData.originalPrice,
-                standardsTitle:this.detailData.standards.title,
-                selstandardsItem:this.selstandardsItem,
-                count:this.count,
-                productId:this.detailData.productId
-            }      
+            if(this.selstandardsItem){  //选择了规格
+                let str = this.detailData.standards.title + ':' +this.selstandardsItem+','+'数量'+':'+this.count
+                this.specification=str
+                this.cartobj={
+                    img:this.detailData.imgUrl,
+                    name:this.detailData.productName,
+                    price:this.detailData.originalPrice,
+                    standardsTitle:this.detailData.standards.title,
+                    selstandardsItem:this.selstandardsItem,
+                    count:this.count,
+                    productId:this.detailData.productId
+                }      
+            }else{
+                this.specification='选择规格'
+            }
+            
         },
         addCart(){ //加入购物车
             // 先取出本地localstrong 
-            try {//存在的情况
-               let obj =  JSON.parse(localStorage.getItem('userCart'))
-               let bool = false;
-               console.log(obj.token,this.userMsg.token)
-               if(this.userMsg.token){  //token验证 匹配用户
-                    console.log('匹配token')
-                    let cart = obj.cart; //取出购物车信息 判断商品是否一致
-                    cart.map((item)=>{
-                        if(item.productId==this.detailData.productId){ //商品ID匹配 一样表示为同件商品
-                            bool=true//为同一件商品            
-                            item.count+=this.count
-                            console.log('同个商品')
-                            obj.cart=cart;
-                            localStorage.setItem('userCart', JSON.stringify(obj))     //更新localstrong
-                            return
+            if(this.specification!='选择规格'){ 
+                try {//存在的情况
+                let obj =  JSON.parse(localStorage.getItem('userCart'))
+                let bool = false;
+                console.log(obj.token,this.userMsg.token)
+                if(this.userMsg.token){  //token验证 匹配用户
+                        console.log('匹配token')
+                        let cart = obj.cart; //取出购物车信息 判断商品是否一致
+                        cart.map((item)=>{
+                            if(item.productId==this.detailData.productId){ //商品ID匹配 一样表示为同件商品
+                                bool=true//为同一件商品            
+                                item.count+=this.count
+                                console.log('同个商品')
+                                obj.cart=cart;
+                                localStorage.setItem('userCart', JSON.stringify(obj))     //更新localstrong
+                                return
+                            }
+                        })
+                        if(bool==false){
+                            obj.cart.push(this.cartobj)
+                            localStorage.setItem('userCart', JSON.stringify(obj))  // 更新localstrong
+                            console.log('不是同个商品')
                         }
-                    })
-                    if(bool==false){
-                        obj.cart.push(this.cartobj)
-                        localStorage.setItem('userCart', JSON.stringify(obj))  // 更新localstrong
-                        console.log('不是同个商品')
+                        
                     }
-                    
+                } catch (error) {
+                    let newobj = {token:this.userMsg.token,cart:[]}
+                    newobj.cart.push(this.cartobj)
+                    console.log(newobj)
+                    localStorage.setItem('userCart', JSON.stringify(newobj)) 
+                    console.log('不存在')
                 }
-            } catch (error) {
-                let newobj = {token:this.userMsg.token,cart:[]}
-                newobj.cart.push(this.cartobj)
-                console.log(newobj)
-                localStorage.setItem('userCart', JSON.stringify(newobj)) 
-                console.log('不存在')
+                this.$toast.success('成功加入购物车');
+                this.changeCartcount(this.count+this.Cartcount)  // 改变  store中 cartcount
+            }else{
+                this.$toast.fail('请选择规格');
+                this.show=true;
             }
-            this.$toast.success('成功加入购物车');
-            this.changeCartcount(this.count+this.Cartcount)  // 改变  store中 cartcount
+           
             
         }
         

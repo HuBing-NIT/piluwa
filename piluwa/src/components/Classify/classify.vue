@@ -8,7 +8,9 @@
             <van-search
                 v-model="value"
                 shape="round"
+                input-align="center"
                 placeholder="请输入搜索关键词"
+                @input='search'
             />
         </div>
         <!-- 分类-列表   -->
@@ -73,6 +75,10 @@ export default {
         todetail(productId){
             // 跳转详情页
             this.$router.push(`/detail/${productId}`)
+        },
+        search(value){
+            console.log(value)
+            // 值改变 触发ajax请求 模糊查询 跳转对应商品的详情页面
         },
         initBs(){
             let wrapper = this.$refs.Wrapper

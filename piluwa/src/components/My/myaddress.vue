@@ -31,7 +31,7 @@
         </div>
 
         <!-- 添加收货地址 -->
-        <router-link ref="addaddress" tag="div" id="add" to="addaddress/add">
+        <router-link ref="addaddress" tag="div" id="add" to="addressManage/add">
             <van-icon name="plus"  color="#f38339"/>
             <span>添加收获地址</span>
         </router-link>
@@ -63,7 +63,7 @@ export default {
            this.$router.go(-1);
        },
        editaddress(Id){  //把ID传入地址
-        this.$router.push(`addaddress/${Id}`)
+        this.$router.push(`addressManage/${Id}`)
             console.log(Id)
        },
         initBs(){

@@ -23,8 +23,8 @@ const mymsg = () =>
     import ('components/My/mymsg.vue')
 const myaddress = () =>
     import ('components/My/myaddress.vue')
-const address = () =>
-    import ('components/My/address.vue')
+const addressManage = () =>
+    import ('components/My/addressManage.vue')
 
 
 import { Dialog } from 'vant';
@@ -44,8 +44,8 @@ const routes = [{
                     path: 'myaddress',
                     component: myaddress,
                 }, {
-                    path: 'addaddress/:addressId',
-                    component: address,
+                    path: 'addressManage/:addressId',
+                    component: addressManage,
                 }
 
             ]

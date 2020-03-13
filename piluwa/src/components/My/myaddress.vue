@@ -15,15 +15,22 @@
         <div class='content'>
             <nav id="addressList">
                 <li v-for="(item,index) in addressList" :key="index">
-                    <p>
+                    <p> 
+                        <van-tag round type="primary" v-show="item.status==1?true:false">默认</van-tag>
                         <span>{{item.getName}}</span>
                         <span>{{item.getPhone}}</span>
                     </p>
                     <p>
                     <span>{{item.address.replace('-',' ')}}</span>
                     </p>
-                    <div class="edit" :addressId='item.addressId' @click="editaddress(item.addressId)" >
-                        <van-icon   size="0.15rem" color="#f58232" name="records" />
+                    <div class="edit"  >
+                         <van-icon class="iconfont" class-prefix='icon' name='shanchu' size="0.16rem" 
+                            :addressId='item.addressId' @click="deleteaddress(item.addressId)"
+                         />
+                         <van-icon class="iconfont" class-prefix='icon' name='bianji' size="0.16rem" 
+                            :addressId='item.addressId' @click="editaddress(item.addressId)"
+                         />
+                        <!-- <van-icon   size="0.15rem" color="#f58232" name="records" /> -->
                     </div>
                 </li>
             </nav>
@@ -48,7 +55,7 @@
 <script>
 import BS from 'better-scroll'
 import {mapState} from 'vuex'
-import {getAddress} from 'api/api.js'
+import {getAddress,deleteAddress} from 'api/api.js'
 export default {
     data(){
         return{
@@ -63,24 +70,37 @@ export default {
            this.$router.go(-1);
        },
        editaddress(Id){  //把ID传入地址
-        this.$router.push(`addressManage/${Id}`)
+            this.$router.push(`addressManage/${Id}`)
             console.log(Id)
+       },
+       deleteaddress(Id){ //删除地址
+            let parms={
+                addressId:Id,
+                token:this.userMsg.token
+            }
+            deleteAddress(parms).then((res)=>{
+                this.addressRender();
+            })
        },
         initBs(){
             let wrapper = this.$refs.Wrapper
             this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
+        addressRender(){
+             let obj={token:this.userMsg.token}
+            getAddress(obj)
+            .then((res)=>{
+                console.log(res.result.resArr)
+                this.addressList=res.result.resArr;  
+                this.$nextTick(()=>{
+                    this.initBs()
+                })  
+            })
+        }
     },
     mounted(){
-        let obj={token:this.userMsg.token}
-        getAddress(obj)
-        .then((res)=>{
-            console.log(res.result.resArr)
-            this.addressList=res.result.resArr;  
-            this.$nextTick(()=>{
-                this.initBs()
-            })  
-        })
+        console.log('我被挂载了')
+        this.addressRender();
     }
 }
 </script>
@@ -119,15 +139,20 @@ export default {
                     border-bottom: 1px solid gray;
                     position: relative;
                     p{
+
                         span{
+                            font-size: 0.12rem;
                             display: inline-block;
                             margin: 0 0.03rem;
                         }
                     }
                     .edit{
                         position: absolute;
+                        width: 0.5rem;
                         right: 0.2rem;
                         top: 0.15rem;
+                        display: flex;
+                        justify-content: space-around;
                     }
                 }
             }

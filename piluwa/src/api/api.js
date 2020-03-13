@@ -34,32 +34,31 @@ let getClassify = (index) => {
 }
 
 
-// 登录注册
-
+// 登录
 let Login = (parms) => {
     let url = `${Host}/register/login`
     return axios.post(url, parms)
 }
 
-
+// 手机验证码
 let getCode = (parms) => {
     let url = `${Host}/register/getCode`
     return axios.post(url, parms)
 }
 
+// 注册
 let register = (parms) => {
     let url = `${Host}/register`
     return axios.post(url, parms)
 }
 
-// 我的资料
+// 获取我的信息
 let getMymsg = (parms) => {
     let url = `${Host}/userinfo/get`
     return axios.post(url, parms)
 }
 
-// 获取地址
-
+// 获取我的收货地址
 let getAddress = (parms) => {
     let url = `${Host}/address/get`
     return axios.post(url, parms)
@@ -76,6 +75,17 @@ let addAddress = (parms) => {
     let url = `${Host}/address/add`
     return axios.post(url, parms)
 }
+// 编辑地址
+let editAddress = (parms)=>{
+    let url = `${Host}/address/update`
+    return axios.post(url, parms)
+}
+// 删除地址
+let deleteAddress=(parms)=>{
+    let url = `${Host}/address/delete`
+    return axios.post(url, parms)
+}
+
 
 // 获得商品详情
 let getshopDetail = (parms) => { //参数是productId
@@ -95,5 +105,7 @@ export {
     getAddress,
     addAddress,
     getshopDetail,
-    getDetailAddress
+    getDetailAddress,
+    editAddress,
+    deleteAddress
 }

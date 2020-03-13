@@ -46,12 +46,12 @@
 <script>
 import {mapState} from 'vuex'
 import address from '../../untils/address.js'
-import {addAddress,getDetailAddress} from 'api/api.js'
+import {addAddress,getDetailAddress,editAddress} from 'api/api.js'
 export default {
    data() {
     return {
       title:'', //标题
-      checked: true,
+      checked: false,
       show: false,
       areaList:address,
       seladdress:'请选择所在区域',
@@ -86,7 +86,6 @@ export default {
             this.show=false;
         },
         cancel(){
-            console.log('哇哇哇哇哇')
             this.show=false;
             this.seladdress='请选择所在区域'
         },
@@ -105,15 +104,22 @@ export default {
                     getName:this.getName,
                     getPhone:this.getphone,
                     address:this.getaddress,
-                    status:2
+                    addressId:this.addressId,
+                    status:this.checked?1:0
                 }
-                    if(this.str!='add'){
+                    if(this.addressId!='add'){ //表示编辑
                         console.log('编辑')
-                    }else{
+                        console.log(obj)
+                        editAddress(obj).then((res)=>{
+                            console.log(res)
+                            this.$router.go(-1);
+                        })
+                    }else{ //表示添加
                         addAddress(obj).then((res)=>{
-                        console.log('添加')
+                        console.log(res)
+                        this.$router.go(-1);
                     })}
-                     this.$router.go(-1);
+                     
             } else{
                this.$toast.fail('请补全地址信息');
             }
@@ -121,17 +127,18 @@ export default {
     },
     mounted(){
         // 获取地址栏的值,判断是edit还是add
-        this.str = this.$route.params.addressId;
-        if(this.str!='add'){ //表示是edit 进行渲染
+        this.addressId = this.$route.params.addressId;
+        if(this.addressId!='add'){ //表示是edit 进行渲染
             this.title='修改收货地址'
             this.bottomTxt='编辑'
-            let obj={addressId:this.str,token:this.userMsg.token}
+            let obj={addressId:this.addressId,token:this.userMsg.token}
             getDetailAddress(obj).then((res)=>{
                 // console.log(res.result)
                 this.seladdress=res.result.address.split('-')[0];
                 this.getName=res.result.getName;
                 this.getphone=res.result.getPhone; 
                 this.Detail=res.result.address.split('-')[1];
+                this.checked=(res.result.status==1?true:false) //判断地址的默认状态 1表示为默认地址
             })
         }else{ //表示是添加 不做处理
             this.title='新增收货地址'

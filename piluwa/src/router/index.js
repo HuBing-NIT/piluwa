@@ -17,8 +17,8 @@ const login = () =>
     import ('components/User/login.vue')
 const typeDetail = () =>
     import ('components/Detail/typeDetail.vue')
-const shopDetail = () =>
-    import ('components/Detail/shopDetail.vue')
+// const shopDetail = () =>
+//     import ('components/Detail/shopDetail.vue')
 const mymsg = () =>
     import ('components/My/mymsg.vue')
 const myaddress = () =>
@@ -27,17 +27,16 @@ const addressManage = () =>
     import ('components/My/addressManage.vue')
 const passManage = () =>
     import ('components/My/passManage.vue')
-
-import { Dialog } from 'vant';
-import IsLogin from '../untils/IsLogin.js'
+// const checkOrder = () =>
+//     import ('components/My/passManage.vue')
 // const router = new VueRouter()
 
 
 // Vue.component({ tologin })
-const routes = [{
+const routes = [
+    {
         path: '/my',
         component: my,
-
         children: [{
             path: 'mymsg',
             component: mymsg,
@@ -56,10 +55,7 @@ const routes = [{
             ]
         }]
     },
-    {
-        path: '/detail/:productId',
-        component: shopDetail,
-    },
+
     {
         path: '/tologin',
         component: tologin,
@@ -83,6 +79,13 @@ const routes = [{
     { path: '/cart', component: cart },
     { path: '/classify', component: classify },
     { path: '/', component: home },
+
+    // { path:'/checkorder',component:checkOrder,name:'checkorder'},
+    // {
+    //     path: '/detail/:productId',
+    //     component: shopDetail,
+    //     name:'detail'
+    // },
 ]
 
 const router = new VueRouter({
@@ -90,10 +93,6 @@ const router = new VueRouter({
         base: process.env.BASE_URL,
         routes
     })
-    // router.beforeEach((to, from, next) => {
-    //     // 检查本地的user记录
-    //     IsLogin(Dialog);
-    //     next()
-    // })
+
 
 export default router

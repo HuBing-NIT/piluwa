@@ -9,6 +9,9 @@ export default new Vuex.Store({
         nowpageTitle: '首页',
         Cartcount: 0,
         flag:1,
+        DetailProductId:0,
+        rendermodule:'', //渲染组件
+        orderMsg:[],  //订单信息
     },
     getters: {
         Title(state) {
@@ -20,6 +23,15 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        changeOrderMsg(state,msg){  //确认的订单信息
+            state.orderMsg=msg 
+        },
+        changeProductId(state,Id){ //修改详细商品Id
+            state.DetailProductId=Id
+        },
+        changeRender(state,module){ //改变组件渲染
+            state.rendermodule=module;
+        },
         changeLoginState(state, obj) {
             if (obj) { //登录
                 console.log('登录')

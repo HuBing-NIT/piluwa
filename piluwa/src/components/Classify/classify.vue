@@ -58,6 +58,7 @@
 <script>
 import BS from 'better-scroll'
 import {getClassify,FuzzySearch} from 'api/api.js'
+import {mapMutations} from 'vuex'
 export default {
     data(){
         return{
@@ -76,6 +77,7 @@ export default {
        
     },
     methods: {
+        ...mapMutations(['changeProductId','changeRender']),
         getContainer() {
              return document.querySelector('#search-res');
         },
@@ -99,7 +101,10 @@ export default {
         },
         todetail(productId){
             // 跳转详情页
-            this.$router.push(`/detail/${productId}`)
+            // this.$router.push(`/detail/${productId}`)
+            this.$store.commit('changeProductId',productId)
+            this.$store.commit('changeRender','detail')
+
         },
         search(value){                    
             // 值改变 触发ajax请求 模糊查询 跳转对应商品的详情页面
@@ -126,7 +131,7 @@ export default {
         },
         initBs(){
             let wrapper = this.$refs.Wrapper
-            this.Bs = new BS(wrapper,{probeType:3,click:true})
+            // this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
     },
     mounted(){

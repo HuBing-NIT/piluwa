@@ -87,6 +87,7 @@
 import BS from 'better-scroll'
 import {getBannerData,getRecommendData} from 'api/api.js'
 import banner from 'components/Banner/banner.vue'
+import {mapMutations} from 'vuex'
 export default {
     components:{banner},
     data(){
@@ -96,8 +97,11 @@ export default {
         }
     },
     methods:{
-        todetail(productId){
-              this.$router.push(`/detail/${productId}`)
+        ...mapMutations(['changeProductId','changeRender']),
+        todetail(productId){//跳转详情
+            this.$store.commit('changeProductId',productId)
+            this.$store.commit('changeRender','detail')
+            //   this.$router.push(`/detail/${productId}`)
         },
          initBs(){
             let wrapper = this.$refs.Wrapper
@@ -124,9 +128,9 @@ export default {
         height: 100%;
         // background: red;
         overflow: hidden;
-         .content{
-
-         }
+        .content{
+            
+        }
  }
     #home{
         width: 100%;

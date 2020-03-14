@@ -30,6 +30,7 @@
 <script>
 import BS from 'better-scroll'
 import {getClassify} from 'api/api.js'
+import {mapMutations} from 'vuex'
 export default {
     data(){
         return{
@@ -38,8 +39,11 @@ export default {
         }
     },
     methods: {
+        ...mapMutations(['changeProductId','changeRender']),
        back(){
-           this.$router.go(-1);
+            this.$router.go(-1);
+            // this.$store.commit('changeProductId','')
+            // this.$store.commit('changeRender','')
        },
        // 请求类别数据
        getType(index){
@@ -55,7 +59,10 @@ export default {
         },
         todetail(productId){
             // 跳转详情页
-            this.$router.push(`/detail/${productId}`)
+            // this.$router.push(`/detail/${productId}`)
+            this.$store.commit('changeProductId',productId)
+            this.$store.commit('changeRender','detail')
+
         },
     },
     mounted(){

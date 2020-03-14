@@ -1,5 +1,6 @@
+
 <template>
-    
+<keep-alive>   
     <transition
         leave-active-class="animated slideOutRight"
         enter-active-class="animated slideInRight"
@@ -81,12 +82,14 @@
             <van-goods-action-icon icon="chat-o" text="客服"  />
             <van-goods-action-icon icon="cart-o" text="购物车" to='/cart' :info="Cartcount" />
             <van-goods-action-button type="warning" text="加入购物车" @click='addCart' />
-            <van-goods-action-button type="danger" text="立即购买" />
+            <van-goods-action-button type="danger" text="立即购买" @click="quickbuy" />
             </van-goods-action>
         </div>
 
     </div>
     </transition>
+    </keep-alive> 
+
 </template>
 
 
@@ -109,12 +112,14 @@ export default {
         }
     },
     computed:{
-        ...mapState(['userMsg','Cartcount'])
+        ...mapState(['userMsg','Cartcount','DetailProductId'])
     },
     methods:{
-        ...mapMutations(['changeCartcount']),
+        ...mapMutations(['changeCartcount','changeProductId','changeRender']),
         back(){
-            this.$router.go(-1);
+            // this.$router.go(-1);
+            this.$store.commit('changeProductId','')
+            this.$store.commit('changeRender','')
         },
          initBs(){
             let wrapper = this.$refs.Wrapper
@@ -198,6 +203,10 @@ export default {
             }
            
             
+        },
+        quickbuy(){  //立即购买
+            // 保存订单信息
+            this.$store.commit('changeRender','checkorder') //动态渲染确认订单组件
         }
         
         
@@ -214,7 +223,8 @@ export default {
     },
     mounted(){
         //  获取地址栏的ID,请求对应数据
-        let productId = this.$route.params.productId
+        let productId = this.DetailProductId
+        console.log(productId)
         let obj = {productId:productId}
         getshopDetail(obj).then((res)=>{
            if(res.status==0){

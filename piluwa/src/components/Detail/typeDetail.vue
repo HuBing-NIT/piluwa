@@ -62,7 +62,7 @@ export default {
         // 根据动态路由获取标题
         this.title=this.$route.params.name
         // 挂在组件时请求数据
-        this.getType(2)
+        this.getType(this.title)
     }
 }
 </script>

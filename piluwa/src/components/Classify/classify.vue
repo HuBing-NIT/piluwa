@@ -5,7 +5,7 @@
         <div class='content'>      
         <!-- 顶部搜索框 -->
         <div class="search">
-            <van-search
+            <van-search 
                 v-model="value"
                 shape="round"
                 input-align="center"
@@ -13,6 +13,19 @@
                 @input='search'
             />
         </div>
+        <!-- 模糊查询的结果  有-->
+        <nav class='search-res' ref="search-res" v-if="haveResult">
+            <li v-for="(item,index) in SearchResList" :key="index" @click='todetail(item.productId)'>
+                <span class="title">{{item.title}}</span>
+                 <span class="type">{{item.type}}</span>
+            </li>
+        </nav>
+        <!-- 模糊查询的结果  无-->
+        <div class='search-res' ref="search-res" v-else>
+            无结果
+        </div>
+        
+          
         <!-- 分类-列表   -->
         <div class="c-list" >
             <!-- 左侧类别 -->
@@ -44,7 +57,7 @@
 
 <script>
 import BS from 'better-scroll'
-import {getClassify} from 'api/api.js'
+import {getClassify,FuzzySearch} from 'api/api.js'
 export default {
     data(){
         return{
@@ -53,19 +66,39 @@ export default {
             classifySelIndex:0,//当前选中的类别的索引
             TypeList:[],
             value:'',
+            show: false,
+            SearchResList:[],//搜索结果
+
+        }
+    },
+    computed:{
+        haveResult(){
+            if(this.SearchResList.length>0){
+                console.log(this.SearchResList)
+                console.log('存在')
+                return true
+            }else{
+                 console.log('不存在')
+                 return false
+            }
         }
     },
     methods: {
+        getContainer() {
+             return document.querySelector('#search-res');
+        },
         // 点击切换类别
         changesel(index){ 
             //点击切换类别和商品
-            this.classifySelIndex=index;
-            this.getType(index+1); 
+            this.classifySelIndex=index; //点击的索引
+            this.getType(index);   //请求数据
+            console.log(222222222222222222)
         },
         // 请求类别数据
         getType(index){
-             getClassify(index).then((res)=>{
-                console.log(res)
+             getClassify(this.classifyList[index]).then((res)=>{
+                // console.log(res)
+                console.log('-------------------')
                 this.TypeList=res.result;
                 this.$nextTick(()=>{
                     this.initBs();
@@ -76,13 +109,24 @@ export default {
             // 跳转详情页
             this.$router.push(`/detail/${productId}`)
         },
-        search(value){
-            console.log(value)
+        search(value){                    
             // 值改变 触发ajax请求 模糊查询 跳转对应商品的详情页面
+            if(value){
+                FuzzySearch({kw:value}).then((res)=>{
+                    this.SearchResList=res.result
+                    this.$refs['search-res'].style.display='block';
+                })
+                this.show=true
+            }else{
+                   console.log(this.$refs['search-res'].display)
+                 this.$refs['search-res'].style.display='none';
+                 this.show=false
+            }
+
         },
         initBs(){
             let wrapper = this.$refs.Wrapper
-            this.Bs = new BS(wrapper,{probeType:3,click:true})
+            // this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
     },
     mounted(){
@@ -96,6 +140,16 @@ export default {
 
 
 <style lang="less" scoped>
+// ::v-deep .van-overlay {
+//   position: absolute;
+// }
+// ::v-deep .van-popup {
+//   position: absolute;
+// }
+// .van-popup--top{
+//     top:0.6rem
+// }
+
 .wrapper{
         width: 100%;
         height: 100%;
@@ -114,6 +168,28 @@ export default {
         .search{
             height: 0.48rem;
             background: green;
+        }
+        .search-res{
+            display: none;
+            position: absolute;
+            height: 4rem;
+            // position: absolute;
+            z-index: 5;
+            width: 100%;
+            background: #fff;
+            padding: 0.1rem 0.3rem;
+            li{
+                border-bottom: 1px solid #e2e1e6;
+                padding: 0.1rem 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .title{
+                    font-size: 0.14rem;
+                }.type{
+                    font-size: 0.12rem;
+                }
+            }
         }
         .c-list{
             display: flex;

@@ -33,6 +33,13 @@ let getClassify = (index) => {
     return axios.post(url, { type: index })
 }
 
+// 模糊查询
+let FuzzySearch = (parms)=>{
+    let url =   `${Host}/classify/fuzzy`
+    return axios.post(url, parms)
+}
+
+
 
 // 登录
 let Login = (parms) => {
@@ -107,5 +114,6 @@ export {
     getshopDetail,
     getDetailAddress,
     editAddress,
-    deleteAddress
+    deleteAddress,
+    FuzzySearch
 }

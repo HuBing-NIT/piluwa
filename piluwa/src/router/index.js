@@ -25,7 +25,8 @@ const myaddress = () =>
     import ('components/My/myaddress.vue')
 const addressManage = () =>
     import ('components/My/addressManage.vue')
-
+const passManage = () =>
+    import ('components/My/passManage.vue')
 
 import { Dialog } from 'vant';
 import IsLogin from '../untils/IsLogin.js'
@@ -46,6 +47,10 @@ const routes = [{
                 }, {
                     path: 'addressManage/:addressId',
                     component: addressManage,
+                },{
+                    path: 'passManage',
+                    component: passManage,
+                    
                 }
 
             ]

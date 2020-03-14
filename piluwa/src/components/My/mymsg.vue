@@ -61,14 +61,14 @@
                 </div>
             </router-link>
             <!-- 修改密码 -->
-            <div class="msg pass">
+            <router-link tag="div" to="mymsg/passManage" class="msg pass">
                 <!-- 左侧字段 -->
                 <span class="msg-l">修改密码</span>
                 <!-- 右侧数据 -->
                 <div class="msg-r">
                     <van-icon name="arrow" />
                 </div>
-            </div>
+            </router-link>
         </div>
 
         <!-- 退出账号 -->

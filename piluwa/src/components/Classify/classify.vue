@@ -14,7 +14,7 @@
             />
         </div>
         <!-- 模糊查询的结果  有-->
-        <nav class='search-res' ref="search-res" v-if="haveResult">
+        <nav class='search-res' ref="search-res" v-if="SearchRes">
             <li v-for="(item,index) in SearchResList" :key="index" @click='todetail(item.productId)'>
                 <span class="title">{{item.title}}</span>
                  <span class="type">{{item.type}}</span>
@@ -67,21 +67,13 @@ export default {
             TypeList:[],
             value:'',
             show: false,
-            SearchResList:[],//搜索结果
+            SearchResList:[],//搜索结果列表
+            SearchRes:'',
 
         }
     },
     computed:{
-        haveResult(){
-            if(this.SearchResList.length>0){
-                console.log(this.SearchResList)
-                console.log('存在')
-                return true
-            }else{
-                 console.log('不存在')
-                 return false
-            }
-        }
+       
     },
     methods: {
         getContainer() {
@@ -100,10 +92,10 @@ export default {
                 // console.log(res)
                 console.log('-------------------')
                 this.TypeList=res.result;
-                this.$nextTick(()=>{
-                    this.initBs();
-                })
              })
+            this.$nextTick(()=>{
+                this.initBs();
+            })
         },
         todetail(productId){
             // 跳转详情页
@@ -111,27 +103,35 @@ export default {
         },
         search(value){                    
             // 值改变 触发ajax请求 模糊查询 跳转对应商品的详情页面
-            if(value){
+            console.log('改变了')
+            if(value!=''){
                 FuzzySearch({kw:value}).then((res)=>{
                     this.SearchResList=res.result
                     this.$refs['search-res'].style.display='block';
+                    this.haveResult()
                 })
                 this.show=true
             }else{
-                   console.log(this.$refs['search-res'].display)
                  this.$refs['search-res'].style.display='none';
                  this.show=false
             }
 
         },
+         haveResult(){ //判断有无搜索结果
+            if(this.SearchResList.length>0){ //有
+                this.SearchRes=true;
+            }else{ //无
+                 this.SearchRes=false;
+            }
+        },
         initBs(){
             let wrapper = this.$refs.Wrapper
-            // this.Bs = new BS(wrapper,{probeType:3,click:true})
+            this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
     },
     mounted(){
         // 挂在组件时请求数据
-        this.getType(1)
+        this.getType(0)
         
     }
 }
@@ -140,15 +140,7 @@ export default {
 
 
 <style lang="less" scoped>
-// ::v-deep .van-overlay {
-//   position: absolute;
-// }
-// ::v-deep .van-popup {
-//   position: absolute;
-// }
-// .van-popup--top{
-//     top:0.6rem
-// }
+
 
 .wrapper{
         width: 100%;

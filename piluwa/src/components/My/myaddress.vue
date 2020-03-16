@@ -1,4 +1,5 @@
 <template>
+    <keep-alive>
     <transition
 
         enter-active-class="animated slideInRight"
@@ -49,12 +50,13 @@
 
     </div>
     </transition>
+    </keep-alive>
 </template>
 
 
 <script>
 import BS from 'better-scroll'
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 import {getAddress,deleteAddress} from 'api/api.js'
 export default {
     data(){
@@ -66,6 +68,7 @@ export default {
         ...mapState(['userMsg']),
     },
     methods: {
+        ...mapMutations(['changeAddress']),
        back(){
            this.$router.go(-1);
        },
@@ -95,11 +98,13 @@ export default {
             this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
         addressRender(){
-             let obj={token:this.userMsg.token}
+            let obj={token:this.userMsg.token}
             getAddress(obj)
             .then((res)=>{
                 console.log(res.result.resArr)
                 this.addressList=res.result.resArr;  
+                //更新store的userMsg的默认address
+                this.$store.commit('changeAddress',res.result.resArr[0])
                 this.$nextTick(()=>{
                     this.initBs()
                 })  
@@ -119,6 +124,7 @@ export default {
 
     #mymsg{
         .page();
+        z-index: 6;
         background: #f5f5f5;
         font-size: 0.12rem;
         font-weight: 500;

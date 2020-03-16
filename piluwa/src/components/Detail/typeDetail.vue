@@ -39,11 +39,9 @@ export default {
         }
     },
     methods: {
-        ...mapMutations(['changeProductId','changeRender']),
+        ...mapMutations(['changeProductId','showDetail']),
        back(){
             this.$router.go(-1);
-            // this.$store.commit('changeProductId','')
-            // this.$store.commit('changeRender','')
        },
        // 请求类别数据
        getType(index){
@@ -59,9 +57,8 @@ export default {
         },
         todetail(productId){
             // 跳转详情页
-            // this.$router.push(`/detail/${productId}`)
-            this.$store.commit('changeProductId',productId)
-            this.$store.commit('changeRender','detail')
+             this.$store.commit('changeProductId',productId)
+            this.$store.commit('showDetail',true)
 
         },
     },

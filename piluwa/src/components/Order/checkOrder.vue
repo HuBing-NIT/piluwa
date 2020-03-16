@@ -14,17 +14,14 @@
             <div class="content">
 
                 <!-- 选择地址 -->
-                <div id="seladdress">
+                <div id="seladdress" @click="selAddress">
                     <div id="address-l">
                         <p> 
-                            <!-- <span>{{item.getName}}</span>
-                            <span>{{item.getPhone}}</span> -->
-                            <span>xxx</span>
-                            <span>XXXXXXX</span>
+                            <span>{{userMsg.address.getName}}</span>
+                            <span>{{userMsg.address.getPhone}}</span>
                         </p>
                         <p>
-                        <!-- <span>{{item.address.replace('-',' ')}}</span> -->
-                            <span>XXX</span>
+                            <span>{{userMsg.address.address.replace('-',' ')}}</span>
                         </p>
                     </div>
                     <van-icon size="0.14rem" name="arrow" />
@@ -38,9 +35,20 @@
                     </article>
                     <!-- 订单详细内容 -->
                     <article id="orderdetail">
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                        <div class="o-list" v-for="(item,index) in orderMsg" :key="index">
+                            <section class="d-l">
+                                <img :src="item.img">
+                            </section>
+                              <section class="d-m">
+                               <p class="title t-txt">{{item.name}}</p>
+                               <p class="standard b-txt">{{item.standardsTitle}}:{{item.selstandardsItem}}</p>
+                            </section>
+                            <section class="d-r">
+                                <p class="o-price t-txt">￥{{item.price}}</p>
+                                 <p class="o-count b-txt">X{{item.count}}</p>
+                            </section>
+                        </div>
+                        
                     </article>
                     
                     <!-- 总计 -->
@@ -51,7 +59,7 @@
                         </div>
                         <div class="lab">
                             <p>小计</p>
-                            <span class="lab-color-t">￥59.00</span>
+                            <span class="lab-color-t">￥{{Scal}}</span>
                         </div>
                         <div class="lab">
                             <p>配送方式</p>
@@ -71,7 +79,7 @@
                         </div>
                         <div class="lab">
                             <p>总计</p>
-                            <span class="lab-color-b">￥59.00</span>
+                            <span class="lab-color-b">￥{{Bcal}}</span>
                         </div>
                     </article>
                 </div>
@@ -85,40 +93,75 @@
            <p>合计:<span>￥59.00</span></p>
             <van-button color="linear-gradient(to right, #dd6d2d, #ed8440)" @click="sumitorder">提交订单</van-button>
         </div>
+
+        <orderRes v-if='ShowRes' :res='res'></orderRes>
     </div>
     </transition>
 </template>
 
 
 <script>
+import orderRes from './orderResult.vue';
 import BS from 'better-scroll'
 import {mapState,mapMutations} from 'vuex'
 export default {
    data() {
     return {
-       
+       res:'', //支付结果
+       ShowRes:false, //显示支付结果
     }
   },
+  components:{
+      orderRes
+  },
    computed:{
-      
+       ...mapState(['userMsg','orderMsg']),
+       Scal(){
+        //    return this.orderMsg.price*this.orderMsg.count
+        return 0
+       },
+       Bcal(){
+            // return this.orderMsg.price*this.orderMsg.count-0
+            return 0
+       }
     },
   methods: {
-       ...mapMutations(['changeRender']),
+       ...mapMutations(['showOrder']),
         back(){ //返回
-             this.$store.commit('changeRender','')
+             this.$store.commit('showOrder',false)
         },
-       
-
         checksumbit(){ //提交修改
            
+        },
+        selAddress(){ //更换收货地址
+            this.$router.push('/my/mymsg/myaddress')
         },
         initBs(){
             let wrapper = this.$refs.Wrapper
             this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
+        sumitorder(){//确认提交
+            this.$dialog.confirm({
+            title: '前往支付',
+            message: '立即支付'
+            }).then(() => { //确认付款
+                this.$toast.success('支付成功');
+                this.res=true;
+                this.ShowRes=true;
+                console.log('下单成功')
+            }).catch(() => { //取消付款
+                this.$toast.fail('等待支付');
+                console.log('请在10分钟内完成订单')
+                this.res=false;
+                this.ShowRes=true;
+            });
+        },
+
+    
     },
     mounted(){
         this.initBs()
+        console.log(this.orderMsg)
     },
     watch:{
       
@@ -139,6 +182,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+        z-index: 3;
         #header{
            .head();
         }
@@ -196,9 +240,48 @@ export default {
                     // height: 1.12rem;
                     // background: red;
                      border-bottom: 1px solid #f7f7f7;
-                     div{
-                          height: 1.12rem;
-                          width: 100%;
+                     .o-list{
+                        height: 1.12rem;
+                        width: 100%;
+                        padding: 0.16rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-around;
+                        .b-txt{
+                            font-size: 0.1rem;
+                            color: #9a9a9a;
+                        }
+                        .t-txt{
+                            font-size: 0.12rem;
+                            font-weight: 500;
+                        }
+                        .d-l{
+                            width: 30%;
+                            img{
+                            width: 0.8rem;
+                            height: 0.8rem;
+                            }
+                        }
+                        .d-m{
+                            height: 100%;
+                            width: 50%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            .standard{
+                                margin-top:0.12rem;
+                            }
+                            
+                            
+                        }
+                        .d-r{
+                            height: 100%;
+                            width:20%;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                            align-items: flex-end;
+                        }
                      }
                 }
                 #price-cal{

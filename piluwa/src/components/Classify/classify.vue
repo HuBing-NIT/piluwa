@@ -77,7 +77,7 @@ export default {
        
     },
     methods: {
-        ...mapMutations(['changeProductId','changeRender']),
+        ...mapMutations(['changeProductId','showDetail']),
         getContainer() {
              return document.querySelector('#search-res');
         },
@@ -101,10 +101,8 @@ export default {
         },
         todetail(productId){
             // 跳转详情页
-            // this.$router.push(`/detail/${productId}`)
             this.$store.commit('changeProductId',productId)
-            this.$store.commit('changeRender','detail')
-
+            this.$store.commit('showDetail',true)
         },
         search(value){                    
             // 值改变 触发ajax请求 模糊查询 跳转对应商品的详情页面

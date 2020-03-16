@@ -11,9 +11,9 @@ import axios from 'axios';
 // }]
 
 
-// let Host = 'http://47.97.244.129:3001'
+let Host = 'http://47.97.244.129:3001'
 
-let Host = 'http://localhost:3001'
+// let Host = 'http://localhost:3001'
 // let Host = 'http://www.pudge.wang:3001'
 
 // 首页

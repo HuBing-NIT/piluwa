@@ -1,19 +1,26 @@
 <template>
+ 
   <div id="app">
-    <heade></heade>
-       
-          <router-view class="view"></router-view>
-              <!-- 动态组件渲染 -->
-           <keep-alive>
+              <heade></heade>
+              <router-view class="view"></router-view>
+
+                <transition
+                  leave-active-class="animated slideOutRight"
+                  enter-active-class="animated slideInRight"
+                >  
+                  <!-- 详情页组件 -->
+                  <detail v-if="detailstatus"></detail>
+                </transition>
                 <transition
                   leave-active-class="animated slideOutRight"
                   enter-active-class="animated slideInRight"
                 >   
-                    <component :is="rendermodule"></component>
+                    <!-- 订单确认组件 -->
+                    <checkorder v-if="orderstatus"></checkorder>
                 </transition>
-          </keep-alive>
-    <foot></foot>
+              <foot></foot>
   </div>
+
 </template>
 
 
@@ -26,8 +33,8 @@ import detail from 'components/Detail/shopDetail.vue'  //商品详情组件
 import {mapState,mapMutations} from 'vuex';
 export default {
   components:{foot,heade,checkorder,detail},
-   computed:{
-        ...mapState(['userMsg','rendermodule'])
+    computed:{
+          ...mapState(['userMsg','rendermodule','detailstatus','orderstatus'])
     },
     data(){
       return{
@@ -38,6 +45,7 @@ export default {
         ...mapMutations(['changeLoginState']),
     },
     mounted(){
+      console.log(this.orderstatus,this.detailstatus)
     }
 }
 

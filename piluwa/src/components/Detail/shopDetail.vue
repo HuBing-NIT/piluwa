@@ -1,10 +1,6 @@
 
 <template>
-<keep-alive>   
-    <transition
-        leave-active-class="animated slideOutRight"
-        enter-active-class="animated slideInRight"
-    >   
+
     <div id="sDetail">
         <!-- 顶部title -->
         <div id='header'>
@@ -80,15 +76,14 @@
         <div class="addCart">
             <van-goods-action>
             <van-goods-action-icon icon="chat-o" text="客服"  />
-            <van-goods-action-icon icon="cart-o" text="购物车" to='/cart' :info="Cartcount" />
+            <van-goods-action-icon icon="cart-o" text="购物车" @click="toCart" :info="Cartcount" />
             <van-goods-action-button type="warning" text="加入购物车" @click='addCart' />
             <van-goods-action-button type="danger" text="立即购买" @click="quickbuy" />
             </van-goods-action>
         </div>
 
     </div>
-    </transition>
-    </keep-alive> 
+
 
 </template>
 
@@ -108,18 +103,23 @@ export default {
             show: false,
             count:1,
             selstandardsIndex:-1,
-            selstandardsItem:''
+            selstandardsItem:'',
+            state:false,
         }
     },
     computed:{
         ...mapState(['userMsg','Cartcount','DetailProductId'])
     },
     methods:{
-        ...mapMutations(['changeCartcount','changeProductId','changeRender']),
+        ...mapMutations(['changeCartcount','changeProductId','changeorderMsg','showDetail','showOrder']),
         back(){
             // this.$router.go(-1);
             this.$store.commit('changeProductId','')
-            this.$store.commit('changeRender','')
+            this.$store.commit('showDetail',false)
+        },
+        toCart(){
+            this.$store.commit('showDetail',false)
+            this.$router.push('/cart') //前往购物车
         },
          initBs(){
             let wrapper = this.$refs.Wrapper
@@ -138,27 +138,39 @@ export default {
             }
         },
         selspecification(){ //选择规格   
+             if(this.selstandardsItem){  //选择了规格
+                    let str = this.detailData.standards.title + ':' +this.selstandardsItem+','+'数量'+':'+this.count
+                    this.specification=str
+                    this.cartobj={
+                        img:this.detailData.imgUrl,
+                        name:this.detailData.productName,
+                        price:this.detailData.originalPrice,
+                        standardsTitle:this.detailData.standards.title,
+                        selstandardsItem:this.selstandardsItem,
+                        count:this.count,
+                        productId:this.detailData.productId
+                    }      
+                }else{
+                    this.specification='选择规格'
+                }
             this.show=false;
-            this.$toast.loading({
-                message: '确认规格',
+            if(this.state!=true){  //代表加入购物车
+                    this.$toast.loading({
+                    message: '确认规格',
+                    forbidClick: true,
+                    duration:500
+                })
+            }else{ //直接下单
+                this.$toast.loading({
+                message: '订单生成中..',
                 forbidClick: true,
                 duration:500
-            })
-            if(this.selstandardsItem){  //选择了规格
-                let str = this.detailData.standards.title + ':' +this.selstandardsItem+','+'数量'+':'+this.count
-                this.specification=str
-                this.cartobj={
-                    img:this.detailData.imgUrl,
-                    name:this.detailData.productName,
-                    price:this.detailData.originalPrice,
-                    standardsTitle:this.detailData.standards.title,
-                    selstandardsItem:this.selstandardsItem,
-                    count:this.count,
-                    productId:this.detailData.productId
-                }      
-            }else{
-                this.specification='选择规格'
+                })
+                //动态渲染确认订单组件
+                this.$store.commit('showOrder',true)
+                this.$store.commit('changeorderMsg',[this.cartobj])
             }
+           
             
         },
         addCart(){ //加入购物车
@@ -205,11 +217,10 @@ export default {
             
         },
         quickbuy(){  //立即购买
-            // 保存订单信息
-            this.$store.commit('changeRender','checkorder') //动态渲染确认订单组件
-        }
-        
-        
+            // 弹出选项
+            this.show=true
+            this.state=true;  
+        } 
     },
     watch:{
         selstandardsIndex(news,old){

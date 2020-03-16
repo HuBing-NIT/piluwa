@@ -127,6 +127,7 @@ export default {
         background: #f5f5f5;
         font-size: 0.12rem;
         font-weight: 500;
+        z-index: 4;
         #header{
            .head()
         }

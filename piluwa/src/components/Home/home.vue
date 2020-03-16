@@ -97,11 +97,11 @@ export default {
         }
     },
     methods:{
-        ...mapMutations(['changeProductId','changeRender']),
+        ...mapMutations(['changeProductId','showDetail']),
         todetail(productId){//跳转详情
+            // 渲染详情页
             this.$store.commit('changeProductId',productId)
-            this.$store.commit('changeRender','detail')
-            //   this.$router.push(`/detail/${productId}`)
+            this.$store.commit('showDetail',true)
         },
          initBs(){
             let wrapper = this.$refs.Wrapper

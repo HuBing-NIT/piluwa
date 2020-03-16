@@ -5,13 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        userMsg: {},
+        userMsg: {}, //用户信息
         nowpageTitle: '首页',
-        Cartcount: 0,
+        Cartcount: 0,  //购物车数量
         flag:1,
-        DetailProductId:0,
-        rendermodule:'', //渲染组件
+        DetailProductId:0,  //商品Id
+        orderstatus:false,
+        detailstatus:false,
         orderMsg:[],  //订单信息
+        Seladdress:'', // 选择的收货地址
     },
     getters: {
         Title(state) {
@@ -23,14 +25,25 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        changeorderMsg(state,msg){
+            state.orderMsg=msg; //记录订单信息
+            console.log(msg)
+        },
+        changeAddress(state,obj){ //修改用户的默认地址
+            state.userMsg.address=obj
+        },
         changeOrderMsg(state,msg){  //确认的订单信息
             state.orderMsg=msg 
         },
         changeProductId(state,Id){ //修改详细商品Id
             state.DetailProductId=Id
         },
-        changeRender(state,module){ //改变组件渲染
-            state.rendermodule=module;
+        showOrder(state,status){ //是否渲染订单组件
+            state.orderstatus=status
+        },
+        showDetail(state,status){   //是否渲染详情页组件
+            console.log(status)
+            state.detailstatus=status
         },
         changeLoginState(state, obj) {
             if (obj) { //登录

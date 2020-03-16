@@ -24,7 +24,7 @@
                         <!-- 勾选按钮 -->
                         <van-checkbox :name="index"></van-checkbox>
                         <!-- 图片 -->
-                        <img :src="item.img" alt="" @click="jumpdetail(item.productId)">
+                        <img :src="item.img" alt="" @click="todetail(item.productId)">
                         <!-- 右侧购物车信息 -->
                         <section class="s-r">
                             <p style="font-size:0.14rem;font-weight:600">{{item.name}}</p>
@@ -91,7 +91,7 @@ export default {
         }
     },
     methods:{
-        ...mapMutations(['changeTitle','changeCartcount']),
+        ...mapMutations(['changeTitle','changeCartcount','changeorderMsg','changeProductId','showDetail','showOrder']),
         cartEdit(){//购物车编辑
             this.editState=false; 
         },
@@ -102,8 +102,9 @@ export default {
             let wrapper = this.$refs.Wrapper
             this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
-        jumpdetail(productId){
-             this.$router.push(`/detail/${productId}`)
+        todetail(productId){
+            this.$store.commit('changeProductId',productId)
+            this.$store.commit('showDetail',true)
         },
         changesel(){//全选与反选
              this.allprice=0;
@@ -150,7 +151,35 @@ export default {
             localStorage.setItem('userCart',JSON.stringify(objcart))
         },
         makeorder(){ //确认提交订单
-
+            // 判断商品的选中状态，选中的加入到订单
+            if(this.result.length){  //有勾中的商品
+                 let remArr=[];  //定义一个移出数组,存放要移出的下标
+                this.result.map((item)=>{
+                    remArr.push(item);
+                });
+                remArr.sort().reverse(); //将移出的下标大->小排序
+                let orderMsg=[];
+                // 加入订单的商品信息
+                remArr.map((item)=>{ //需要的索引下标 
+                    orderMsg.push(this.cartList[item])  //生成订单信息
+                    this.cartList.splice(item,1) //移出购物车
+                })
+                // 将加入订单的商品信息保存到store.orderMsg
+                this.$store.commit('changeorderMsg',orderMsg)
+                // 更新本地local
+                this.updataLocal();
+                // 跳转确认订单页面
+                this.$toast.loading({
+                    message: '订单生成中..',
+                    forbidClick: true,
+                    duration:500
+                })
+                this.$store.commit('changeorderMsg',orderMsg)
+                this.$store.commit('showOrder',true)
+            }else{
+                this.$toast.fail('未选择购物车商品');
+            }
+           
         },
         cal(index){ //计算总结和总个数
             let selprice= this.cartList[index].price
@@ -219,7 +248,7 @@ export default {
                         this.initBs();
                     })
                 }
-                
+                console.log(this.cartList)
             } catch (error) { //无商品
             console.log(error)
                 this.Hasshop=true
@@ -244,6 +273,8 @@ export default {
         position: absolute;
         top: 0.48rem;
         bottom: 0.49rem;
+        // z-index: 5;
+        background: #fff;
     }
 .cart-no{
     width: 100%;

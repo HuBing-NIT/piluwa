@@ -156,10 +156,11 @@ export default {
             this.show=false;
             if(this.state!=true){  //代表加入购物车
                     this.$toast.loading({
-                    message: '确认规格',
+                    message: '加入购物车',
                     forbidClick: true,
                     duration:500
                 })
+                this.addCart()
             }else{ //直接下单
                 this.$toast.loading({
                 message: '订单生成中..',

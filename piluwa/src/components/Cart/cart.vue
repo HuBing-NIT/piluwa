@@ -125,7 +125,7 @@ export default {
                 console.log(this.cartList[index].productId)
                 if(sel_productId==this.cartList[index].productId){
                     this.cartList.splice(index,1) //从购物车尽心删除
-                    break; //结束循环
+                    // break; //结束循环
                 }
             }
             // console.log(sel_productId)
@@ -135,9 +135,11 @@ export default {
             title: '移出购物车',
             message: '确认从购物车移出吗'
             }).then(() => {
-                 this.result.map((item)=>{
+                 this.result.reverse().map((item)=>{
+                    console.log(item)
                     this.remove(item)   //执行 从购物车移出
                  })
+                 // 更新store
                  this.result=[];
                  this.updataLocal() //更新本地local
                  this.editState=true;
@@ -208,19 +210,11 @@ export default {
         }
     },
     watch:{
-        // valueList(news,olds){  //监听数量的变化
-            
-        //     news.map((item,index)=>{ //index索引
-        //         //判断是否选中
-        //         if(this.result.indexOf(index)!=-1){   
-        //                 this.cartList[index].count = item;    //更新数量
-        //                 this.updataLocal();//更新本地
-        //                 this.$store.commit('changeCartcount',this.allcount)      // 更新store全局的allcount
-        //                 this.allprice -= this.cartList[index].price
-        //         }
-
-        //     })
-        // },
+        cartList(news,olds){
+            if(news.length==0){
+                this.Hasshop=true;
+            }
+        },
         result(news,olds){  //监听勾选的商品
             // console.log(news) //获得选中商品的价格和数量
             // let allcount=0;
@@ -236,7 +230,8 @@ export default {
             // 判断本地localstrong是否有商品  
             try { 
                 let objcart =  JSON.parse(localStorage.getItem('userCart'));
-                if(objcart.cart){
+                console.log(objcart)
+                if(objcart.cart.length!=0){
                     this.Hasshop=false
                     this.cartList=objcart.cart  //购物车列表赋值
                     
@@ -247,10 +242,11 @@ export default {
                     this.$nextTick(()=>{
                         this.initBs();
                     })
+                }else{ //购物车为空
+                    this.Hasshop=true
                 }
                 console.log(this.cartList)
-            } catch (error) { //无商品
-            console.log(error)
+            } catch (error) { //本地无购物车记录
                 this.Hasshop=true
                 console.log('购物车无商品')
             }     

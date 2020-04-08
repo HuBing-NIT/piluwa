@@ -101,6 +101,28 @@ let getshopDetail = (parms) => { //参数是productId
     return axios.post(url, parms)
 }
 
+// 订单提交
+let sumbitOrder = (parms) =>{
+    let url = `${Host}/order/add`
+    console.log(parms)
+    return axios.post(url, parms)
+}
+// 订单更新
+let updateOrder = (parms) =>{
+    let url = `${Host}/order/update`
+    console.log(parms)
+    return axios.post(url, parms)
+}
+
+// 请求订单数据
+let getOrderList = (parms) =>{
+    let url = `${Host}/order/getOrder`
+    console.log(parms)
+    return axios.post(url, parms)
+}
+
+
+
 export {
     getBannerData,
     getRecommendData,
@@ -115,5 +137,8 @@ export {
     getDetailAddress,
     editAddress,
     deleteAddress,
-    FuzzySearch
+    FuzzySearch,
+    sumbitOrder,
+    updateOrder,
+    getOrderList
 }

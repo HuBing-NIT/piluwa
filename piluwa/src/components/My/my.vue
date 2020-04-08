@@ -21,9 +21,9 @@
           
        </div>
         <!-- 我的订单 -->
-        <div class="myorder">
-            <div class="title">
-                <span>我的订单</span>
+        <div class="myorder" >
+            <div class="title" @click='toOrder'>
+                <span >我的订单</span>
                 <span>&gt;</span>
             </div>
              <van-grid :column-num="4">
@@ -34,7 +34,8 @@
                 icon-prefix='icon'
                 :key="index"
                 :icon="value.icon"
-                :text="value.title"    
+                :text="value.title"
+                @click='jumpmyorder(index+1)'    
             />
             </van-grid>
         </div>
@@ -55,7 +56,7 @@
         </div>
 
         <!--嵌套路由 登陆组件 -->
-        <router-view></router-view>
+        <router-view :index='selindex'></router-view>
     </div>
     
 </template>
@@ -66,6 +67,7 @@ import {mapState,mapMutations} from 'vuex';
 export default {
     data(){
         return {
+            selindex:'',
             LoginState:false,
             orderarr:[{icon: 'daifukuan',title: '待付款'},{icon: 'daifahuo',title: '待发货'},{icon: 'daishouhuo',title: '待收货'},{icon: 'qianshou-',title: '已收货'}],
             arr:[{icon: 'biaodan',title: '我的表单'},{icon: 'huiyuanqia',title: '我的会员卡'},{icon: 'wodejifen',title: '我的积分'},{icon: 'wodeyouhuiquan',title: '我的优惠券'},
@@ -93,7 +95,17 @@ export default {
         },
         Tomymsg(){ //前往个人信息
             this.$router.push('/my/mymsg')
-        }
+        },
+        toOrder(){ //前往个人订单
+                this.selindex=0;
+             this.$router.push('/my/myorder')
+           
+        },
+        jumpmyorder(index){  //前往我的订单
+           this.selindex=index;
+            this.$router.push('/my/myorder')
+          
+        }   
     },
     mounted(){  
         // let obj=JSON.parse(localStorage.getItem('loginMsg'))
@@ -101,7 +113,7 @@ export default {
         
         if(this.userMsg.phone){//store 中存在用户信息 自动登录状态
             console.log(this.userMsg,'自动登录')
-            
+    
             this.LoginState=true;
         }else{
              console.log(this.userMsg,'未登录')

@@ -25,6 +25,12 @@ const myaddress = () =>
     import ('components/My/myaddress.vue')
 const addressManage = () =>
     import ('components/My/addressManage.vue')
+const myorder = () =>
+    import ('components/My/myOrder.vue')
+// const orderDetail = () =>{
+//     import ('components/Detail/orderDetail.vue')
+// }
+
 const passManage = () =>
     import ('components/My/passManage.vue')
 // const checkOrder = () =>
@@ -37,10 +43,12 @@ const routes = [
     {
         path: '/my',
         component: my,
-        children: [{
+        children: [
+            {
             path: 'mymsg',
             component: mymsg,
-            children: [{
+            children: [
+                {
                     path: 'myaddress',
                     component: myaddress,
                 }, {
@@ -53,7 +61,16 @@ const routes = [
                 }
 
             ]
-        }]
+            },
+            {
+                path: 'myorder',
+                component: myorder, 
+                // children: [{
+                //     path: 'my/myorder/:orderId',
+                //     component: orderDetail,
+                // }]
+            }
+    ]
     },
 
     {

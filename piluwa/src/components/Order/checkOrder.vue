@@ -90,11 +90,11 @@
         </div>
         <!-- 确认-->
         <div id="check" ref="checksubmit">
-           <p>合计:<span>￥59.00</span></p>
+           <p>合计:<span>￥{{Bcal}}</span></p>
             <van-button color="linear-gradient(to right, #dd6d2d, #ed8440)" @click="sumitorder">提交订单</van-button>
         </div>
 
-        <orderRes v-if='ShowRes' :res='res'></orderRes>
+        <orderRes v-if='ShowRes' :res='res' :ordermsg='orderDetail' :allcount='Bcal'></orderRes>
     </div>
     </transition>
 </template>
@@ -109,6 +109,8 @@ export default {
     return {
        res:'', //支付结果
        ShowRes:false, //显示支付结果
+       orderDetail:{
+       },  //订单信息
     }
   },
   components:{
@@ -117,16 +119,22 @@ export default {
    computed:{
        ...mapState(['userMsg','orderMsg']),
        Scal(){
-        //    return this.orderMsg.price*this.orderMsg.count
-        return 0
+             return this.cal()
        },
        Bcal(){
             // return this.orderMsg.price*this.orderMsg.count-0
-            return 0
+            return this.cal()-0
        }
     },
   methods: {
        ...mapMutations(['showOrder']),
+        cal(){
+            let calprice=0;
+            this.orderMsg.map((item,index)=>{
+                calprice+=item.price*item.count
+            })
+            return calprice
+        },
         back(){ //返回
              this.$store.commit('showOrder',false)
         },
@@ -142,18 +150,28 @@ export default {
         },
         sumitorder(){//确认提交
             this.$dialog.confirm({
-            title: '前往支付',
-            message: '立即支付'
+            title: '下单中',
+            message: '是否提交'
             }).then(() => { //确认付款
-                this.$toast.success('支付成功');
+                this.$toast.success('下单成功');
+                let obj={
+                     orderDetail:{
+                        'o-user':this.userMsg, //地址中的订单信息
+                        'o-shopMsg':this.orderMsg  //订单中的商品信息
+                    },  
+                }
+                this.orderDetail=obj
+                // 下单成功把订单的内容通过props传到子组件
                 this.res=true;
                 this.ShowRes=true;
                 console.log('下单成功')
+                // 订单中的数据通过父子通信从父组件拿过来
+                // 下单成功发起请求写入数据库，订单的状态为未付款状态
             }).catch(() => { //取消付款
-                this.$toast.fail('等待支付');
-                console.log('请在10分钟内完成订单')
-                this.res=false;
-                this.ShowRes=true;
+                this.$toast.fail('下单失败');
+                this.$store.commit('showOrder',false) //返回详情页
+                // this.res=false;
+                // this.ShowRes=true;
             });
         },
 

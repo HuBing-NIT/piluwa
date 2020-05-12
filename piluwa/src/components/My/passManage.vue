@@ -43,7 +43,8 @@
 
 
 <script>
-
+import {editpass} from '../../api/api'
+import {mapMutations} from 'vuex'
 export default {
    data() {
     return {
@@ -63,6 +64,7 @@ export default {
       
     },
   methods: {
+        ...mapMutations(['changeLoginState']),
         back(){ //返回
             this.$router.go(-1);
         },
@@ -86,12 +88,66 @@ export default {
             }
             return flag
         },
+        ExitLoginStatus(){ //退出登录状态
+            // local 清除
+           
+            localStorage.setItem('loginMsg',null)
+             // vuex 清除
+            this.changeLoginState({})
+        },
         checksumbit(){ //提交修改
-            if(this.judgefill()&&this.judgepass()){ //判断通过 ajax请求进行密码修改
-                console.log('进行ajax请求')
-            }else{ //有错误或者信息
-            
-            }
+                if(this.judgefill()&&this.judgepass()){ //判断通过 ajax请求进行密码修改
+                     this.$dialog.confirm({
+                        title: '确认修改密码',
+                    })
+                    .then(() => {
+                        let passEditobj = {
+                            phone:this.phone,
+                            password:this.oldpass,
+                            newpass:this.newpass
+                        }
+                        editpass(passEditobj).then((res)=>{
+                            if(res.status==0){ //密码修改成功
+                                 // 3s后前往login进行重新登录
+                                const toast = this.$toast.loading({
+                                    duration: 0, // 持续展示 toast
+                                    forbidClick: true,
+                                    message: '3 秒后前往登录',
+                                });
+
+                                let second = 3;
+                                const timer = setInterval(() => {
+                                    second--;
+                                    if (second) {
+                                        toast.message = `${second} 秒后前往登录`;
+                                    } else {
+                                        clearInterval(timer);
+                                        // 手动清除 Toast
+                                        this.$toast.clear();
+                                        // 清除登录状态
+                                        this.ExitLoginStatus();
+                                        this.$router.push('/tologin/login')//跳转
+                                    }
+                                }, 1000);
+
+                            }else{//密码修改失败
+                                this.$toast.fail('修改失败,请检查输入是否正确');
+                            }
+                        }).catch((err)=>{
+                            console.log(err)
+                        })
+                    })
+                    .catch(() => {
+                        // on cancel
+                    });
+                    
+                   
+                }else{ //有错误或者信息
+                    this.$notify({ type: 'warning', message: '请检查输入是否正确' });
+                    // Notify({ type: 'warning', message: '通知内容' });
+                }
+           
+
         }
     },
     mounted(){

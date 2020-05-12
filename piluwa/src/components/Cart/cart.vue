@@ -254,8 +254,6 @@ export default {
             this.Hasshop=true
             this.$store.commit('changeCartcount',0) 
         }
-       
-       
     },
     
 }

@@ -12,12 +12,12 @@
         <section id="content">
             <div class="warn">
                 <span>请于2小时内完成付款,超时订单将被取消</span>
+                <span><van-count-down millisecond :time="time" format="HH:mm:ss" /></span>
             </div>
                    <!-- 订单信息 -->
             <div id="order-msg">  
                     <van-panel  title="订单号"  :status="orderId">
                     </van-panel>
-
                     <van-panel title="发送方式" status="平台配送">
                         <div></div>
                     </van-panel>
@@ -44,7 +44,8 @@ export default {
    data() {
     return {
         orderId:'',
-        createT:''
+        createT:'',
+        time: 2 * 60 *60* 1000,
     }
   },
   props:['res','ordermsg','allcount'],
@@ -52,12 +53,11 @@ export default {
       
     },
   methods: {
-        ...mapMutations(['showOrder']),
+        ...mapMutations(['showOrder','changeTimeStamp']),
         back(){ //返回
              this.$store.commit('showOrder',false)
         },
         quickpay(){ //立即支付
-
             this.$dialog.confirm({
             title: '前往支付',
             message: '立即支付'
@@ -66,15 +66,17 @@ export default {
                 // 修改名单状态为已付款状态
                  updateOrder({
                      oId:this.orderId,
-                     oStatus:'已付款'
+                     oStatus:'1',
+                     orderCreateTimestamp:0,
                  }).then((res)=>{
                      console.log(res)
                     //  跳转回详情页
                      this.$store.commit('showOrder',false)
+                     this.$toast.success('支付成功');
                  })
-
             }).catch(() => { //取消付款
-                this.$toast.fail('取消支付');
+                this.$toast.fail('取消支付,请在2小时内完成');
+                this.$store.commit('showOrder',false)
                 // 为未付款状态
                 console.log('请在10分钟内完成订单')
             });
@@ -85,12 +87,13 @@ export default {
             let oAddress=this.ordermsg.orderDetail['o-user'].address;
             let oShopMsg=this.ordermsg.orderDetail['o-shopMsg'];
             let oId = this.orderId;
-            let oStatus = '未付款';
+            let oStatus = '0';
             let createTime =  this.createT;  //创建时间
             let updataTime = '';  //更新时间
             let allprice = this.allcount;
+            let orderCreateTimestamp = new Date().getTime(); //生成订单实时间戳
             return {
-                oUser,oId,oShopMsg,oAddress,oStatus,createTime,updataTime,allprice
+                oUser,oId,oShopMsg,oAddress,oStatus,createTime,updataTime,allprice,orderCreateTimestamp
             }
         },
         timePD(m){return m<10?'0'+m:m }, //时间判断
@@ -114,13 +117,14 @@ export default {
 
             this.createT= y+'-'+this.timePD(m)+'-'+this.timePD(d)+' '+this.timePD(h)+':'+this.timePD(mm)+':'+this.timePD(s);
             // return nowDate
-        }   
+        },
+
     },
     mounted(){
         this.makderOrderId() //生成订单号
         // 调用接口 状态为未付款状态
         sumbitOrder(this.processdata()).then((res)=>{//添加订单到数据库
-            console.log
+            console.log(res);
         })    
     },
     watch:{
@@ -151,11 +155,15 @@ export default {
             background: #f8f8f8;
             .warn{
                 width: 100%;
-                height: 0.37rem;
-                text-align: center;
-                span{
-                    line-height: 0.37rem;
-                }
+                height: 0.6rem;
+                display: flex;
+                // text-align: center;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-evenly;
+                // span{
+                //     line-height: 0.37rem;
+                // }
             }
              #order-msg{
                  width: 100%;

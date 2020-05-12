@@ -11,9 +11,9 @@ import axios from 'axios';
 // }]
 
 
-let Host = 'http://47.97.244.129:3001'
+// let Host = 'http://47.97.244.129:3001'
 
-// let Host = 'http://localhost:3001'
+let Host = 'http://localhost:3001'
 // let Host = 'http://www.pudge.wang:3001'
 
 // 首页
@@ -28,9 +28,9 @@ let getRecommendData = () => {
 }
 
 // 类别页
-let getClassify = (index) => {
-    let url = `${Host}/classify`
-    return axios.post(url, { type: index })
+let getClassify = (type) => { //根据分类请求商品
+    let url = `${Host}/type/getShop`
+    return axios.post(url, { type })
 }
 
 // 模糊查询
@@ -64,6 +64,13 @@ let getMymsg = (parms) => {
     let url = `${Host}/userinfo/get`
     return axios.post(url, parms)
 }
+
+// 修改密码
+let editpass = (parms) => {
+    let url = `${Host}/userinfo/editpass`
+    return axios.post(url, parms)
+}
+
 
 // 获取我的收货地址
 let getAddress = (parms) => {
@@ -107,6 +114,12 @@ let sumbitOrder = (parms) =>{
     console.log(parms)
     return axios.post(url, parms)
 }
+
+let SearchOrder = (parms)=>{
+    let url = `${Host}/order/Search`
+    console.log(parms)
+    return axios.post(url, parms)
+}
 // 订单更新
 let updateOrder = (parms) =>{
     let url = `${Host}/order/update`
@@ -119,6 +132,12 @@ let getOrderList = (parms) =>{
     let url = `${Host}/order/getOrder`
     console.log(parms)
     return axios.post(url, parms)
+}
+
+
+let getType = () =>{ //获取类别列表
+    let url = `${Host}/type`
+    return axios.post(url)
 }
 
 
@@ -140,5 +159,8 @@ export {
     FuzzySearch,
     sumbitOrder,
     updateOrder,
-    getOrderList
+    getOrderList,
+    getType,
+    editpass,
+    SearchOrder
 }

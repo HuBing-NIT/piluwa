@@ -11,6 +11,7 @@
                   <!-- 详情页组件 -->
                   <detail v-if="detailstatus"></detail>
                 </transition>
+                
                 <transition
                   leave-active-class="animated slideOutRight"
                   enter-active-class="animated slideInRight"

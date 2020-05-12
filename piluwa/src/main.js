@@ -62,7 +62,6 @@ router.beforeEach((to, from, next) => {
                 });
             }
         }else{
-
             if(store.state.flag==1){
                 // 将本地信息写入state,且只执行一次 
                 console.log('存入++++++++++++++')

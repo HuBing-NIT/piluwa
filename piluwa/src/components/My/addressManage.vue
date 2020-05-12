@@ -108,18 +108,13 @@ export default {
                     status:this.checked?1:0
                 }
                     if(this.addressId!='add'){ //表示编辑
-                        console.log('编辑')
-                        console.log(obj)
                         editAddress(obj).then((res)=>{
-                            console.log(res)
                             this.$router.go(-1);
                         })
                     }else{ //表示添加
                         addAddress(obj).then((res)=>{
-                        console.log(res)
                         this.$router.go(-1);
-                    })}
-                     
+                    })}        
             } else{
                this.$toast.fail('请补全地址信息');
             }
@@ -133,7 +128,6 @@ export default {
             this.bottomTxt='编辑'
             let obj={addressId:this.addressId,token:this.userMsg.token}
             getDetailAddress(obj).then((res)=>{
-                // console.log(res.result)
                 this.seladdress=res.result.address.split('-')[0];
                 this.getName=res.result.getName;
                 this.getphone=res.result.getPhone; 

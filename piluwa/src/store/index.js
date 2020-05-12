@@ -13,7 +13,8 @@ export default new Vuex.Store({
         orderstatus:false,
         detailstatus:false,
         orderMsg:[],  //订单信息
-        Seladdress:'', // 选择的收货地址
+        Seladdress:{}, // 选择的收货地址
+        timestamp:{} //订单生成时的时间戳
     },
     getters: {
         Title(state) {
@@ -25,12 +26,20 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        changeTimeStamp(state,obj){
+            console.log(obj)
+            console.log(obj.orderId)
+            console.log(obj.timestamp)
+            state.timestamp[obj.orderId]=obj.timestamp;//插入时间戳
+            // console.log(state.timestamp)obj[orderId]
+        },
         changeorderMsg(state,msg){
             state.orderMsg=msg; //记录订单信息
             console.log(msg)
         },
         changeAddress(state,obj){ //修改用户的默认地址
-            state.userMsg.address=obj
+            // state.userMsg.address=obj
+            state.Seladdress=obj;
         },
         changeOrderMsg(state,msg){  //确认的订单信息
             state.orderMsg=msg 
@@ -48,11 +57,13 @@ export default new Vuex.Store({
         changeLoginState(state, obj) {
             if (obj) { //登录
                 console.log('登录')
-                state.userMsg = obj
+                state.userMsg = obj;
+                state.Seladdress = obj.address;
                 state.flag++;
             } else { //注销
                 console.log('注销')
                 state.userMsg = {}
+                state.Seladdress = {}
                 state.flag--;
             }
         },

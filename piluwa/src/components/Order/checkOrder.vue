@@ -12,16 +12,15 @@
         <div class='wrapper' ref='Wrapper'>
             <!-- 内容区 -->
             <div class="content">
-
                 <!-- 选择地址 -->
                 <div id="seladdress" @click="selAddress">
                     <div id="address-l">
                         <p> 
-                            <span>{{userMsg.address.getName}}</span>
-                            <span>{{userMsg.address.getPhone}}</span>
+                            <span>{{Seladdress.getName}}</span>
+                            <span>{{Seladdress.getPhone}}</span>
                         </p>
                         <p>
-                            <span>{{userMsg.address.address.replace('-',' ')}}</span>
+                            <span>{{Seladdress.address.replace('-',' ')}}</span>
                         </p>
                     </div>
                     <van-icon size="0.14rem" name="arrow" />
@@ -104,6 +103,7 @@
 import orderRes from './orderResult.vue';
 import BS from 'better-scroll'
 import {mapState,mapMutations} from 'vuex'
+import { Dialog } from 'vant';
 export default {
    data() {
     return {
@@ -117,7 +117,7 @@ export default {
       orderRes
   },
    computed:{
-       ...mapState(['userMsg','orderMsg']),
+       ...mapState(['userMsg','orderMsg','Seladdress']),
        Scal(){
              return this.cal()
        },
@@ -136,10 +136,19 @@ export default {
             return calprice
         },
         back(){ //返回
-             this.$store.commit('showOrder',false)
+            Dialog.confirm({
+                title: '是否取消订单',
+            })
+            .then(() => {
+                this.$store.commit('showOrder',false);
+            })
+            .catch(() => {
+                // on cancel
+            });
+             
         },
         checksumbit(){ //提交修改
-           
+            
         },
         selAddress(){ //更换收货地址
             this.$router.push('/my/mymsg/myaddress')

@@ -42,11 +42,11 @@
             </nav>
             <!-- 右侧类别对应商品 -->
             <nav class="list-r">
-                <li v-for="(item,index) in TypeList" :key="index" @click='todetail(item.productId)'>
-                    <img :src="item.imgUrl" alt="">
-                    <span>{{item.title}}</span>
-                </li>   
-               
+                    <li  v-for="(item,index) in TypeList" :key="index" @click='todetail(item.productId)'>
+                        <img :src="item.imgUrl" alt="">
+                        <span>{{item.title}}</span>
+                    </li>   
+                    <!-- <span v-show='TypeList'>无数据</span> -->
             </nav>
         </div>
         </div>
@@ -57,13 +57,14 @@
 
 <script>
 import BS from 'better-scroll'
-import {getClassify,FuzzySearch} from 'api/api.js'
+import {getClassify,FuzzySearch,getType} from 'api/api.js'
 import {mapMutations} from 'vuex'
 export default {
     data(){
         return{
             // classifyDetailList:[],
-            classifyList:['推荐分类','全球奶粉','皮噜娃尿包','尿不湿','营养辅食','喂养用品','宝宝洗护','清洁用品','孕产母乳','婴幼儿服饰','宝宝出行'], //左侧类别
+            classifyList:[],
+            // ['推荐分类','全球奶粉','皮噜娃尿包','尿不湿','营养辅食','喂养用品','宝宝洗护','清洁用品','孕产母乳','婴幼儿服饰','宝宝出行'], //左侧类别
             classifySelIndex:0,//当前选中的类别的索引
             TypeList:[],
             value:'',
@@ -85,28 +86,44 @@ export default {
         changesel(index){ 
             //点击切换类别和商品
             this.classifySelIndex=index; //点击的索引
-            this.getType(index);   //请求数据
-            console.log(222222222222222222)
+            this.getTypeData(index);   //请求数据
+        },
+        async getTypeList(){ //获取类别列表
+                let res = await getType();
+            // getType().then((res)=>{ 
+                let classifyList = res.result.map((item)=>{
+                    return item.Type
+                })
+                this.classifyList=classifyList
+            // })
         },
         // 请求类别数据
-        getType(index){
-             getClassify(this.classifyList[index]).then((res)=>{
-                // console.log(res)
-                console.log('-------------------')
+        async getTypeData(index){
+            let res = await getClassify(this.classifyList[index]);
                 this.TypeList=res.result;
-             })
             this.$nextTick(()=>{
                 this.initBs();
             })
         },
         todetail(productId){
+            console.log(productId)
             // 跳转详情页
             this.$store.commit('changeProductId',productId)
             this.$store.commit('showDetail',true)
         },
-        search(value){                    
+
+        // f(fn,delay){
+        //     let timer = null;
+        //     return function(){
+        //         console.log(this)
+        //         if(timer){ clearTimeout(timer) }
+        //         timer=setTimeout(fn,delay)
+        //     }
+        // },
+        
+        search(value){     
+            
             // 值改变 触发ajax请求 模糊查询 跳转对应商品的详情页面
-            console.log('改变了')
             if(value!=''){
                 FuzzySearch({kw:value}).then((res)=>{
                     this.SearchResList=res.result
@@ -118,9 +135,11 @@ export default {
                  this.$refs['search-res'].style.display='none';
                  this.show=false
             }
-
         },
-         haveResult(){ //判断有无搜索结果
+
+        
+
+        haveResult(){ //判断有无搜索结果
             if(this.SearchResList.length>0){ //有
                 this.SearchRes=true;
             }else{ //无
@@ -132,10 +151,14 @@ export default {
             // this.Bs = new BS(wrapper,{probeType:3,click:true})
         },
     },
-    mounted(){
-        // 挂在组件时请求数据
-        this.getType(0)
+    beforeMount(){
         
+    },
+    async mounted(){
+
+        // 挂在组件时请求数据
+        await this.getTypeList();
+        await this.getTypeData(0)
     }
 }
 
@@ -190,6 +213,7 @@ export default {
             display: flex;
             .list-l{
                 width: 1rem;
+                height: 100vh;
                 background: #f7f7f7;
                 li{
                     height: 0.56rem;

@@ -40,9 +40,9 @@
                                 </section>
                                 <section class="popup-size">
                                     <div class="popup-1">
-                                        <span style="font-size:0.14rem;font-weight:600;margin-left:0.1rem">{{detailData.standards.title}}</span>
+                                        <span style="font-size:0.14rem;font-weight:600;margin-left:0.1rem">{{detailData.standards[0].title}}</span>
                                         <nav>
-                                            <li @click="selstandards(index,item)" v-for="(item,index) in detailData.standards.standards" :key="index" :id="selstandardsIndex==index?'selActive':''" >
+                                            <li @click="selstandards(index,item)" v-for="(item,index) in detailData.standards[0].standards" :key="index" :id="selstandardsIndex==index?'selActive':''" >
                                                 {{item}}
                                             </li>
                                         </nav>
@@ -139,13 +139,14 @@ export default {
         },
         selspecification(){ //选择规格   
              if(this.selstandardsItem){  //选择了规格
-                    let str = this.detailData.standards.title + ':' +this.selstandardsItem+','+'数量'+':'+this.count
+                    let str = this.detailData.standards[0].title + ':' +this.selstandardsItem+','+'数量'+':'+this.count
                     this.specification=str
+                    console.log(this.detailData)
                     this.cartobj={
                         img:this.detailData.imgUrl,
                         name:this.detailData.productName,
                         price:this.detailData.originalPrice,
-                        standardsTitle:this.detailData.standards.title,
+                        standardsTitle:this.detailData.standards[0].title,
                         selstandardsItem:this.selstandardsItem,
                         count:this.count,
                         productId:this.detailData.productId
@@ -180,15 +181,12 @@ export default {
                 try {//存在的情况
                 let obj =  JSON.parse(localStorage.getItem('userCart'))
                 let bool = false;
-                console.log(obj.token,this.userMsg.token)
                 if(this.userMsg.token){  //token验证 匹配用户
-                        console.log('匹配token')
                         let cart = obj.cart; //取出购物车信息 判断商品是否一致
                         cart.map((item)=>{
                             if(item.productId==this.detailData.productId){ //商品ID匹配 一样表示为同件商品
                                 bool=true//为同一件商品            
                                 item.count+=this.count
-                                console.log('同个商品')
                                 obj.cart=cart;
                                 localStorage.setItem('userCart', JSON.stringify(obj))     //更新localstrong
                                 return
@@ -197,16 +195,12 @@ export default {
                         if(bool==false){
                             obj.cart.push(this.cartobj)
                             localStorage.setItem('userCart', JSON.stringify(obj))  // 更新localstrong
-                            console.log('不是同个商品')
                         }
-                        
                     }
                 } catch (error) {
                     let newobj = {token:this.userMsg.token,cart:[]}
                     newobj.cart.push(this.cartobj)
-                    console.log(newobj)
                     localStorage.setItem('userCart', JSON.stringify(newobj)) 
-                    console.log('不存在')
                 }
                 this.$toast.success('成功加入购物车');
                 this.changeCartcount(this.count+this.Cartcount)  // 改变  store中 cartcount
@@ -214,8 +208,6 @@ export default {
                 this.$toast.fail('请选择规格');
                 this.show=true;
             }
-           
-            
         },
         quickbuy(){  //立即购买
             // 弹出选项
@@ -240,6 +232,7 @@ export default {
         let obj = {productId:productId}
         getshopDetail(obj).then((res)=>{
            if(res.status==0){
+            console.log(res.result)
             this.detailData=res.result;// 获取的数据赋值
             console.log(this.detailData)
             this.$nextTick(()=>{
